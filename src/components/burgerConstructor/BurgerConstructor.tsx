@@ -117,8 +117,7 @@ const BurgerConstructor = () => {
                             <OrderDetails />
                         </Modal>
                     </React.Fragment>
-
-                    }
+                }
             </div>
         </React.Fragment>
     )

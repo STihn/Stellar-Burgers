@@ -3,7 +3,6 @@ import styles from './ingredientDetails.module.css';
 import cn from 'classnames';
 
 const IngredientDetails = (props: any) => {
-    console.log(props)
     const {image, type, name, fat, proteins, carbohydrates, calories} = props.data;
     return (
         <div className={styles.wrapper}>
