@@ -1,0 +1,48 @@
+.body {
+    width: 600px;
+    height: 912px;
+    display: flex;
+    flex-direction: column;
+}
+
+.block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wrapper {
+    height: 656px;
+    overflow-x: auto;
+    scroll-snap-type: y;
+}
+
+.total {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.price {
+    font-size: 48px;
+    line-height: 36px;
+    display: flex;
+    align-items: center;
+    text-align: right;
+    color: #F2F2F3;
+}
+
+.button {
+    background: linear-gradient(63.18deg, #801AB3 0%, #4C4CFF 100%);
+    border-radius: 64px;
+    padding: 20px 40px;
+    cursor: pointer;
+}

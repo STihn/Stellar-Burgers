@@ -1,0 +1,51 @@
+.body {
+    width: 600px;
+    height: 912px;
+}
+
+.header {
+    font-size: 36px;
+    line-height: 40px;
+    display: flex;
+    align-items: center;
+    color: #F2F2F3;
+    width: 100%;
+}
+
+.wrap {
+    display: flex;
+}
+
+.subtitle {
+    font-size: 24px;
+    line-height: 30px;
+    display: flex;
+    align-items: center;
+    color: #F2F2F3;
+}
+
+.tab_text {
+    font-size: 16px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #F2F2F3;
+}
+
+.block {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.inner {
+    display: flex;
+    flex-direction: column;
+    overflow-x: auto;
+    scroll-snap-type: y;
+    height: 716px;
+}
+
+  
