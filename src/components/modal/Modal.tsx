@@ -15,14 +15,12 @@ interface IProps {
 
 const Modal = (props: IProps) => {
     const modalRoot = document.getElementById("react-modals")!;
-    modalRoot.classList.add(styles.modal)
     const {text, onClose, children} = props;
 
     React.useEffect(() => {
-        const handleEsc = (event: { keyCode: number; }) => {
-           if (event.keyCode === 27) {
+        const handleEsc = (event: { key: string }) => {
+           if (event.key === 'Escape') {
             onClose()
-            modalRoot.classList.remove(styles.modal)
           }
         };
         window.addEventListener('keydown', handleEsc);
@@ -32,24 +30,19 @@ const Modal = (props: IProps) => {
         };
       }, []);
 
-    const handleClouse = () => {
-        onClose()
-        modalRoot.classList.remove(styles.modal)
-    }
-
     return ReactDOM.createPortal(
-        <React.Fragment>
-                <ModalOverlay onClick={handleClouse}/>
-                <section className={styles.body}>
-                    <div className={styles.wrapper}>
-                        <div className={cn(styles.wrap, 'mt-10','ml-10', 'mr-10', `${!text ? styles.iconBtn : null}`)}>
-                            {text && <p className={cn(styles.text, "text text_type_main-large")}>{text}</p>}
-                            <CloseIcon type="primary" onClick={handleClouse} />
-                        </div>
-                        {children}
+        <div className={styles.modal}>
+            <ModalOverlay onClick={onClose}/>
+            <section className={styles.body}>
+                <div className={styles.wrapper}>
+                    <div className={cn(styles.wrap, 'mt-10','ml-10', 'mr-10', `${!text ? styles.iconBtn : null}`)}>
+                        {text && <p className={cn(styles.text, "text text_type_main-large")}>{text}</p>}
+                        <CloseIcon type="primary" onClick={onClose} />
                     </div>
-                </section>
-        </React.Fragment>,
+                    {children}
+                </div>
+            </section>
+        </div>,
         modalRoot
     )
 }

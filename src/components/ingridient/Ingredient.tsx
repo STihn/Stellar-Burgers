@@ -1,16 +1,18 @@
 import React from "react";
 import cn from 'classnames';
 
-import styles from './ingredients.module.css';
+import styles from './ingredient.module.css';
+import {IData} from '../../utils/types';
 
 import {CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components';
+
 interface IProps {
-    data: {image?: string, type?: string, price?: number, name?: string},
+    data: IData,
     onClick: () => void
 }
 
 
-const Ingredients = (props: IProps) => {
+const Ingredient = (props: IProps) => {
     const {image, type, price, name} = props.data;
     return (
         <section className={cn(styles.wrapper, 'mb-10')} onClick={props.onClick}>
@@ -24,4 +26,4 @@ const Ingredients = (props: IProps) => {
         </section>
     )
 }
-export default Ingredients;
+export default Ingredient;

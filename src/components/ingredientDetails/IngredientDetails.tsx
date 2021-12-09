@@ -2,14 +2,12 @@ import React from "react";
 import cn from 'classnames';
 
 import styles from './ingredientDetails.module.css';
-
-interface IData {
-    data: { image?: string; type?: string; name?: string; fat?: number; proteins?: number; carbohydrates?: number; calories?: number; };
+import {IData} from '../../utils/types';
+interface IProps {
+    data: IData;
 }
 
-
-
-const IngredientDetails = (props: IData) => {
+const IngredientDetails = (props: IProps) => {
     
     const {image, type, name, fat, proteins, carbohydrates, calories} = props.data;
     return (

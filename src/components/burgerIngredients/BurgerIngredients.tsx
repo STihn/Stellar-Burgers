@@ -5,7 +5,7 @@ import styles from './burgerIngredients.module.css';
 
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 
-import Ingredients from  '../ingridients/Ingredients';
+import Ingredient from '../ingridient/Ingredient';
 import Modal from "../modal/Modal";
 import IngredientDetails from "../ingredientDetails/IngredientDetails";
 
@@ -60,19 +60,19 @@ const BurgerIngredients = () => {
                 <p className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Булки</p>
                 <div className={cn(styles.block)}>
                     {state.data.map((item:  Record<string, any>) => {
-                        return item.type === 'bun' &&  <Ingredients data={item} key={item._id} onClick={()=>handleOpen(item)}/>
+                        return item.type === 'bun' &&  <Ingredient data={item} key={item._id} onClick={()=>handleOpen(item)}/>
                     })}
                 </div>
                 <p className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Соусы</p>
                 <div className={cn(styles.block)}>
                     {state.data.map((item:  Record<string, any>) => {
-                        return item.type === 'sauce' &&  <Ingredients data={item} key={item._id} onClick={()=>handleOpen(item)}/>
+                        return item.type === 'sauce' &&  <Ingredient data={item} key={item._id} onClick={()=>handleOpen(item)}/>
                     })}
                 </div>
                 <p className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Начинки</p>
                 <div className={cn(styles.block)}>
                     {state.data.map((item:  Record<string, any>) => {
-                        return item.type === 'main' &&  <Ingredients data={item} key={item._id} onClick={()=>handleOpen(item)}/>
+                        return item.type === 'main' &&  <Ingredient data={item} key={item._id} onClick={()=>handleOpen(item)}/>
                     })}
                 </div>
             </div>
