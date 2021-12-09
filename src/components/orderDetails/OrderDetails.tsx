@@ -1,6 +1,8 @@
 import React from  'react';
 import cn from 'classnames';
+
 import styles from '../orderDetails/orderDetails.module.css';
+
 import imageModal from '../../images/done.gif';
 
 const OrderDetails = () => {

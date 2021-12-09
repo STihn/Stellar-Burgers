@@ -1,18 +1,17 @@
 import React from "react";
 import cn from 'classnames';
 
-import {CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components';
-
 import styles from './ingredients.module.css';
 
+import {CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components';
 interface IProps {
-    data: Record<string, any>,
-    onClick: any
+    data: {image?: string, type?: string, price?: number, name?: string},
+    onClick: () => void
 }
 
 
 const Ingredients = (props: IProps) => {
-    const {image, type, price, name}: any = props.data;
+    const {image, type, price, name} = props.data;
     return (
         <section className={cn(styles.wrapper, 'mb-10')} onClick={props.onClick}>
             <Counter count={1} size="small" />

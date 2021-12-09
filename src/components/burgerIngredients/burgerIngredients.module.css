@@ -45,7 +45,19 @@
     flex-direction: column;
     overflow-x: auto;
     scroll-snap-type: y;
+    scrollbar-color: #2F2F37;
+    scrollbar-width: 8px;
     height: 716px;
+}
+
+.inner::-webkit-scrollbar {
+    width: 8px;
+    background-color: #2F2F37;
+    ;
+}
+
+.inner::-webkit-scrollbar-thumb {
+    background-color: #8585AD;
 }
 
   

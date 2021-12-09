@@ -1,12 +1,11 @@
 import React from "react";
 import cn from 'classnames';
 
-import Ingredients from  '../ingridients/Ingredients';
+import styles from './burgerIngredients.module.css';
 
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 
-import styles from './burgerIngredients.module.css';
-import ModalOverlay from "../modalOverlay/ModalOverlay";
+import Ingredients from  '../ingridients/Ingredients';
 import Modal from "../modal/Modal";
 import IngredientDetails from "../ingredientDetails/IngredientDetails";
 
@@ -14,43 +13,34 @@ import IngredientDetails from "../ingredientDetails/IngredientDetails";
 
 const BurgerIngredients = () => {
     const [current, setCurrent] = React.useState('one');
-    const [state, setState] = React.useState({
-        data: [] as any
-    })
-    const [ingredient, setIngredient] = React.useState()
+    const [state, setState] = React.useState({data: []})
+    const [ingredient, setIngredient] = React.useState({})
 
     React.useEffect(() => {
-        const data = async() => {
-            const res = await fetch('https://norma.nomoreparties.space/api/ingredients');
-            const result = await res.json();
-            setState({data: result.data})
+        try{
+            const data = async() => {
+                const res = await fetch('https://norma.nomoreparties.space/api/ingredients');
+                const result = await res.json();
+                setState({data: result.data})
+            }
+            data()
         }
-        data()
+        catch(err) {
+            console.log(err)
+        }
+
         
     }, [])
     const [isOpen, setOpen] = React.useState(false);
 
-    const handleOpen = (item: any) => {
+    const handleOpen = (item: Record<string, any>) => {
         setOpen(true)
-        setIngredient(item)
+        setIngredient(item) 
     }
 
-    const handleClouse = () => {
+    const handleClose = () => {
         setOpen(false)
     }
-
-    React.useEffect(() => {
-        const handleEsc = (event: { keyCode: number; }) => {
-           if (event.keyCode === 27) {
-            setOpen(false)
-          }
-        };
-        window.addEventListener('keydown', handleEsc);
-    
-        return () => {
-          window.removeEventListener('keydown', handleEsc);
-        };
-      }, []);
     
     return (
         <section className={cn(styles.body, 'mb-10')}>
@@ -69,34 +59,28 @@ const BurgerIngredients = () => {
             <div className={styles.inner}>
                 <p className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Булки</p>
                 <div className={cn(styles.block)}>
-                    {state.data.map((item: any) => {
+                    {state.data.map((item:  Record<string, any>) => {
                         return item.type === 'bun' &&  <Ingredients data={item} key={item._id} onClick={()=>handleOpen(item)}/>
                     })}
                 </div>
                 <p className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Соусы</p>
                 <div className={cn(styles.block)}>
-                    {state.data.map((item: any) => {
+                    {state.data.map((item:  Record<string, any>) => {
                         return item.type === 'sauce' &&  <Ingredients data={item} key={item._id} onClick={()=>handleOpen(item)}/>
                     })}
                 </div>
                 <p className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Начинки</p>
                 <div className={cn(styles.block)}>
-                    {state.data.map((item: any) => {
+                    {state.data.map((item:  Record<string, any>) => {
                         return item.type === 'main' &&  <Ingredients data={item} key={item._id} onClick={()=>handleOpen(item)}/>
                     })}
                 </div>
             </div>
-            <div style={{overflow: 'hidden'}} id="react-modals">
-                {isOpen && 
-                    <React.Fragment>
-                        <ModalOverlay onClouse={handleClouse} />
-                        <Modal onClouse={handleClouse} text={'Детали ингредиента'}>
-                            <IngredientDetails data={ingredient}/>
-                        </Modal>
-                    </React.Fragment>
-
-                }
-            </div>
+            {isOpen && 
+                <Modal onClose={handleClose} text={'Детали ингредиента'}>
+                    <IngredientDetails data={ingredient}/>
+                </Modal>
+            }
         </section>
     )
 }

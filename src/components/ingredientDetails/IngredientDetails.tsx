@@ -1,8 +1,16 @@
 import React from "react";
-import styles from './ingredientDetails.module.css';
 import cn from 'classnames';
 
-const IngredientDetails = (props: any) => {
+import styles from './ingredientDetails.module.css';
+
+interface IData {
+    data: { image?: string; type?: string; name?: string; fat?: number; proteins?: number; carbohydrates?: number; calories?: number; };
+}
+
+
+
+const IngredientDetails = (props: IData) => {
+    
     const {image, type, name, fat, proteins, carbohydrates, calories} = props.data;
     return (
         <div className={styles.wrapper}>

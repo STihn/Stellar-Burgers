@@ -1,13 +1,14 @@
 import React from "react";
 import cn from 'classnames';
+
 import styles from './button.module.css';
 
 interface IProps {
     text?: string,
-    className?: any,
+    className?: string,
     style?: Record<string, any>,
     icon?: React.ReactNode
-    onClick?: any
+    onClick?: () => void
 }
 
 const Button: React.FC<IProps> = (props) => {

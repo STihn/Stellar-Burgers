@@ -1,10 +1,11 @@
 import React from "react";
 import cn from 'classnames';
 
-import {Logo, BurgerIcon, ListIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components';
-import Button from "../button/Button";
-
 import styles from './app-header.module.css';
+
+import {Logo, BurgerIcon, ListIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components';
+
+import Button from "../button/Button";
 
 const Burger = () => {
     return (
