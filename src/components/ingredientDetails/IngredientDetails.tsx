@@ -3,13 +3,16 @@ import cn from 'classnames';
 
 import styles from './ingredientDetails.module.css';
 import {IData} from '../../utils/types';
+import { useSelector, useDispatch } from 'react-redux';
 interface IProps {
-    data: IData;
+    state: IData;
+    burgerReducer: any
 }
 
-const IngredientDetails = (props: IProps) => {
+const IngredientDetails = () => {
     
-    const {image, type, name, fat, proteins, carbohydrates, calories} = props.data;
+    const {image, type, name, fat, proteins, carbohydrates, calories} = useSelector((state: IProps) => state.burgerReducer.IngredientDetails);
+    
     return (
         <div className={styles.wrapper}>
             <img src={image} alt={type} className={cn(styles.image, 'mb-4')}/>
