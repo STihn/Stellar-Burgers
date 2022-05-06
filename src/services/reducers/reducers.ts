@@ -6,29 +6,25 @@ import {
     TAB_BUN,
     TAB_MAIN,
     TAB_SAUSE,
-    UPDATE_CONSTRUCTOR
+    UPDATE_CONSTRUCTOR_BUN,
+    UPDATE_CONSTRUCTOR_BODY,
+    INCREMENT_BUN,
+    INCREMENT_BODY,
+    DECREMENT_BUN,
+    DECREMENT_BODY,
+    DELETE_CONSTRUCTOR_BODY,
+    ORDER_DETAILS,
+    DND_UPDATE_CONSTRUCTOR_BODY,
     } from '../actions/actions';
 
 const initialState = {
     BurgerIngredients: [],
-    BurgerConstructor: [],
+    BurgerConstructorBun: [] as any,
+    BurgerConstructorBody: [],
     IngredientDetails: [],
-    OrderDetails: [],
-    currentTab: 'BUN'
-}
-
-export function fetchIngridients() {
-    return async (dispatch: Function) => {
-        try{
-            const res = await fetch('https://norma.nomoreparties.space/api/ingredients');
-            const result = await res.json();
-            await dispatch({type: FETCH_INGRIDIENTS, BurgerIngredients: result.data})
-        }
-        catch(err) {
-            console.log(err)
-        }
-    } 
-
+    OrderDetails: [] as Array<string>,
+    currentTab: 'BUN',
+    totalPrice: 0
 }
 
 const tabSwitchReducer = (state = initialState, action: any) => {
@@ -73,7 +69,6 @@ const burgerReducer = (state = initialState, action: any) => {
             }
         }
         case DELETE_INGREDIENT_DETAILS: {
-            console.log(action)
             return {
                 ...state,
                 IngredientDetails: []
@@ -85,13 +80,43 @@ const burgerReducer = (state = initialState, action: any) => {
     }
 }
 
+const handlerBody = (arr: any, idx: number) => {
+    if(arr.length === 1 ) {
+       return arr.slice(0, 0)
+    }
+    if(idx === 0) {
+        return arr.slice(1)
+    }
+    else {
+       return [...arr.slice(0, idx), ...arr.slice(idx + 1)]
+    }
+
+}
+
 const burgerConstructorReducer = (state = initialState, action: any) => {
     switch (action.type) {
-        case UPDATE_CONSTRUCTOR: {
-            // console.log(action, '33')
+        case UPDATE_CONSTRUCTOR_BUN: {
             return {
                 ...state,
-                BurgerConstructor: [...state.BurgerConstructor,action.data]
+                BurgerConstructorBun: [state.BurgerConstructorBun].map((element: any) => element.type !== action.type ? action.data : state.BurgerConstructorBun),
+            }
+        }
+        case UPDATE_CONSTRUCTOR_BODY: {
+            return {
+                ...state,
+                BurgerConstructorBody: [...state.BurgerConstructorBody, action.data],
+            }
+        }
+        case DELETE_CONSTRUCTOR_BODY: {
+            return {
+                ...state,
+                BurgerConstructorBody: handlerBody(state.BurgerConstructorBody, action.index)
+            }
+        }
+        case DND_UPDATE_CONSTRUCTOR_BODY:  {
+            return {
+                ...state,
+                BurgerConstructorBody: action.newCards
             }
         }
       default: {
@@ -100,8 +125,40 @@ const burgerConstructorReducer = (state = initialState, action: any) => {
     }
 }
 
+const totalPriceReducer = (state = initialState, action: any) => {
+    switch (action.type) {
+      case INCREMENT_BUN:
+        return { totalPrice: state.totalPrice + (action.data?.price*2)};
+      case INCREMENT_BODY:
+        return { totalPrice: state.totalPrice + action.price };
+      case DECREMENT_BUN:
+        return { totalPrice: state.totalPrice - action.BurgerConstructorBun.map((item: any) => item.price*2)};
+        case DECREMENT_BODY:
+        return { totalPrice: state.totalPrice - action.item.price};
+      default: {
+          return state
+      }
+    }
+}
+
+const orderDetailsReducer = (state = initialState, action: any) => {
+    switch(action.type) {
+        case ORDER_DETAILS: {
+            return {
+                OrderDetails: action.OrderDetails,
+            }
+        }
+        default: {
+            return state
+        }
+    }
+}
+
+
 export const rootReducer = combineReducers({
     burgerReducer,
     tabSwitchReducer,
-    burgerConstructorReducer
+    burgerConstructorReducer,
+    totalPriceReducer,
+    orderDetailsReducer
 })

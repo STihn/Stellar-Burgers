@@ -11,15 +11,9 @@
     align-items: flex-end;
 }
 
-.wrap {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 80px;
-}
-
 .wrapper {
     height: 464px;
+    width: 100%;
     overflow-x: auto;
     scroll-snap-type: y;
     scrollbar-color: #2F2F37;
@@ -78,6 +72,7 @@
 
 .wrap_main {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     width: 100%;
     align-items: center;

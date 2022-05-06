@@ -9,19 +9,22 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Ingredient from '../ingridient/Ingredient';
 import Modal from '../modal/Modal';
 import IngredientDetails from '../ingredientDetails/IngredientDetails';
-import { fetchIngridients } from '../../services/reducers/reducers';
+import { fetchIngridients } from '../../services/actions/actions';
 import { INGREDIENT_DETAILS, DELETE_INGREDIENT_DETAILS, TAB_BUN, TAB_SAUSE, TAB_MAIN } from '../../services/actions/actions';
 
 interface RootState {
     BurgerIngredients: any,
     burgerReducer: any,
-    tabSwitchReducer: any
+    tabSwitchReducer: any,
+    burgerConstructorReducer: any
 }
 
 const BurgerIngredients = () => {
     const dispatch = useDispatch();
     const {BurgerIngredients} = useSelector((store: RootState) => store.burgerReducer);
     const {currentTab} = useSelector((store: RootState) => store.tabSwitchReducer);
+    const {BurgerConstructorBun} = useSelector((store: RootState) => store.burgerConstructorReducer);
+    const {BurgerConstructorBody} = useSelector((store: RootState) => store.burgerConstructorReducer);
 
     const [isOpen, setOpen] = useState(false);
 
@@ -51,8 +54,6 @@ const BurgerIngredients = () => {
 
     const handleScroll = () => {
         const scrollTop = scrollRef.current.scrollTop;
-        // const scrollSause = sauseRef.current.scrollTop;
-        // const scrollMain = mainRef.current.scrollTop;
 
         if(scrollTop ===  0) {
             dispatch({type: TAB_BUN, currentTab: 'BUN'});
@@ -68,7 +69,7 @@ const BurgerIngredients = () => {
     const bunScroll = () => bunRef.current.scrollIntoView();
     const sauseScroll = () => sauseRef.current.scrollIntoView();
     const mainScroll = () => mainRef.current.scrollIntoView();
-    
+
     return (
         <section className={cn(styles.body, 'mb-10')}>
             <h1 className={cn(styles.header, 'mt-10', 'mb-5', 'text text_type_main-large')}>Соберите бургер</h1>
@@ -87,19 +88,19 @@ const BurgerIngredients = () => {
                 <p ref={bunRef} className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Булки</p>
                 <div className={cn(styles.block)}>
                     {BurgerIngredients.map((item:  Record<string, any>) => {
-                        return item.type === 'bun' &&  <Ingredient data={item} key={item._id} onClick={()=>handleOpen(item)}/>
+                        return item.type === 'bun' && <Ingredient data={item} key={item._id} onClick={()=>handleOpen(item)} counter={BurgerConstructorBun}/>
                     })}
                 </div>
                 <p ref={sauseRef} className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Соусы</p>
                 <div className={cn(styles.block)}>
                     {BurgerIngredients.map((item:  Record<string, any>) => {
-                        return item.type === 'sauce' &&  <Ingredient data={item} key={item._id} onClick={()=>handleOpen(item)}/>
+                        return item.type === 'sauce' &&  <Ingredient data={item} key={item._id} onClick={()=>handleOpen(item)} counter={BurgerConstructorBody}/>
                     })}
                 </div>
                 <p ref={mainRef} className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Начинки</p>
                 <div className={cn(styles.block)}>
                     {BurgerIngredients.map((item:  Record<string, any>) => {
-                        return item.type === 'main' &&  <Ingredient data={item} key={item._id} onClick={()=>handleOpen(item)}/>
+                        return item.type === 'main' &&  <Ingredient data={item} key={item._id} onClick={()=>handleOpen(item)} counter={BurgerConstructorBody}/>
                     })}
                 </div>
             </div>
