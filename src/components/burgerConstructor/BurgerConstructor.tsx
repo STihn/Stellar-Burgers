@@ -32,7 +32,6 @@ interface RootState {
 
 const BurgerConstructor: React.FC = () => {
     const dispatch = useDispatch();
-    const id = uuidv4();
     const {BurgerConstructorBun} = useSelector((store: RootState) => store.burgerConstructorReducer);
     const {BurgerConstructorBody} = useSelector((store: RootState) => store.burgerConstructorReducer);
     const {totalPrice} = useSelector((store: RootState) => store.totalPriceReducer);
@@ -65,7 +64,7 @@ const BurgerConstructor: React.FC = () => {
     const [, dropTarget] = useDrop({
         accept: 'ingridient',
         drop(data: any) {
-            data.id = id;
+            data.id = uuidv4();
             data.count = 0;
             if(data.type === 'bun') {
                 data.count++;
@@ -111,7 +110,7 @@ const BurgerConstructor: React.FC = () => {
         else {
             return BurgerConstructorBun.map((item: any) => {
                 return(
-                    <div className={cn(styles.wrap)}  key={uuidv4()}>
+                    <div className={cn(styles.wrap)}  key={item.id}>
                         <ConstructorElement
                         type={type}
                         isLocked={true}
@@ -136,7 +135,7 @@ const BurgerConstructor: React.FC = () => {
                             BurgerConstructorBody.map((item: any, index: number) => {
                                 return(
                                     <ConstructorCard 
-                                        key={uuidv4()} 
+                                        key={item.id} 
                                         moveCard={moveRow} 
                                         item={item} 
                                         handleClose={()=>deleteIngredient(item.id)} 

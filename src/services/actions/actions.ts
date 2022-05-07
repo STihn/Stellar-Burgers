@@ -16,18 +16,25 @@ export const DND_UPDATE_CONSTRUCTOR_BODY = 'DND_UPDATE_CONSTRUCTOR_BODY'
 
 const baseUrl = 'https://norma.nomoreparties.space/api';
 
+const _checkResponse = (res: any) => {
+    if(res.ok) {
+        return  res.json();
+    }
+    return Promise.reject(`Ошибка ${res.status}`);
+}
+
 export function fetchIngridients() {
     return async (dispatch: Function) => {
         try{
             const res = await fetch(`${baseUrl}/ingredients`);
-            const result = await res.json();
-            await dispatch({type: FETCH_INGRIDIENTS, BurgerIngredients: result.data})
+            let result = await _checkResponse(res);
+            return await dispatch({type: FETCH_INGRIDIENTS, BurgerIngredients: result.data})
         }
         catch(err) {
             console.log(err)
         }
+        
     } 
-
 }
 
 export function fetchOrderDetails(item: Array<string>) {
@@ -40,8 +47,8 @@ export function fetchOrderDetails(item: Array<string>) {
                 },
                 body: JSON.stringify(item)
             });
-            let result = await res.json();
-            await dispatch({type: ORDER_DETAILS, OrderDetails: result})
+            let result = await _checkResponse(res);
+            return await dispatch({type: ORDER_DETAILS, OrderDetails: result})
         }
         catch(err) {
             console.log(err)

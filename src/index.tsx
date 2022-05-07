@@ -18,8 +18,6 @@ const composeEnhancers =
 const enhancer = composeEnhancers(applyMiddleware(thunk));
 const store = createStore(rootReducer, enhancer);
 
-// const store = createStore(rootReducer);
-
 ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>

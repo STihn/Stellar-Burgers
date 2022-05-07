@@ -34,7 +34,7 @@ const BurgerIngredients = () => {
     const scrollRef = useRef<any>(null);
     
     useEffect(() => {
-        dispatch(fetchIngridients())
+       dispatch(fetchIngridients())
     }, []);
 
 
