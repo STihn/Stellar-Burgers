@@ -6,6 +6,8 @@ export interface IData {
     fat?: number;
     proteins?: number;
     carbohydrates?: number;
-    calories?: number; 
+    calories?: number;
+    _id?: string,
+    count?: any
 }
   

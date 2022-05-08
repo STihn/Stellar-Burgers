@@ -11,14 +11,9 @@
     align-items: flex-end;
 }
 
-.wrap {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .wrapper {
     height: 464px;
+    width: 100%;
     overflow-x: auto;
     scroll-snap-type: y;
     scrollbar-color: #2F2F37;
@@ -57,4 +52,32 @@
     border-radius: 64px;
     padding: 20px 40px;
     cursor: pointer;
+}
+
+.wrap_top {
+    border-radius: 88px 88px 40px 40px;
+    background: #1C1C21;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.wrap_button {
+    border-radius: 40px 40px 88px 88px;
+    background: #1C1C21;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.wrap_main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+    border-radius: 88px 88px 88px 88px;
+    background: #1C1C21;
+    margin-right: 0;
+    padding-right: 0;
 }

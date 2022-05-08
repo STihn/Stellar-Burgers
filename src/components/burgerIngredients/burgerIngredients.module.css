@@ -60,4 +60,8 @@
     background-color: #8585AD;
 }
 
+.tab_text-active {
+    border-bottom: 2px solid #131316;
+}
+
   
