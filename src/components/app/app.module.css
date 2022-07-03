@@ -1,11 +1,10 @@
 .root {
     min-width: 100%;
     min-height: 100vh;
-    margin: 0 auto;
+    margin: 40px auto 0px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     font-family: 'JetBrains Mono','Arial', sans-serif;
     background: #131316;
@@ -14,10 +13,4 @@
     -moz-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale; 
-}
-
-.main {
-    width: 1240px;
-    display: flex;
-    justify-content: space-between;
 }

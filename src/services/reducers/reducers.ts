@@ -15,6 +15,7 @@ import {
     DELETE_CONSTRUCTOR_BODY,
     ORDER_DETAILS,
     DND_UPDATE_CONSTRUCTOR_BODY,
+    AUTH_USER,
     } from '../actions/actions';
 
 const initialState = {
@@ -24,7 +25,8 @@ const initialState = {
     IngredientDetails: [],
     OrderDetails: [] as Array<string>,
     currentTab: 'BUN',
-    totalPrice: 0
+    totalPrice: 0,
+    userInfo: {}
 }
 
 const tabSwitchReducer = (state = initialState, action: any) => {
@@ -154,11 +156,25 @@ const orderDetailsReducer = (state = initialState, action: any) => {
     }
 }
 
+const userReducuer = (state = initialState, action: any) => {
+    console.log(action)
+    switch(action.type) {
+        case AUTH_USER: {
+            return {
+                userInfo: action.user,
+            }
+        }
+        default: {
+            return state
+        }
+    }
+}
 
 export const rootReducer = combineReducers({
     burgerReducer,
     tabSwitchReducer,
     burgerConstructorReducer,
     totalPriceReducer,
-    orderDetailsReducer
+    orderDetailsReducer,
+    userReducuer
 })
