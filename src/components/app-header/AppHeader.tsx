@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import styles from './app-header.module.css';
 
-import {Logo, BurgerIcon, ListIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components';
+import {Logo, BurgerIcon, ListIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 
 import Button from "../button/Button";
 
@@ -20,11 +20,6 @@ const IconList = () => {
     )
 }
 
-const IconProfile = () => {
-    return (
-        <ProfileIcon type="primary" />
-    )
-}
  
 const AppHeader = () => {
  return (
@@ -35,8 +30,13 @@ const AppHeader = () => {
                 <Button className={cn(styles.button, styles.button_nav, 'text text_type_main-default' ,'p-5', 'mt-4', 'mb-4')} text={'Лента заказов'} icon={IconList()}/>
              </div>
              <div className={styles.wrapper}>
-                <Logo />
-                <Link className={cn(styles.button, styles.button_nav, styles.login, 'text text_type_main-default','p-5', 'mt-4', 'mb-4')} to={'/profile'}>Личный кабинет</Link>
+                <Link to={'/'}><Logo /></Link>
+                <Link 
+                    className={cn(styles.button, styles.button_nav, styles.login, 'text text_type_main-default','p-5', 'mt-4', 'mb-4')} 
+                    to={'/profile'} 
+                >
+                    Личный кабинет
+                </Link>
              </div>
          </nav>
 

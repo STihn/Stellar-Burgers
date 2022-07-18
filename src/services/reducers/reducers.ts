@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { userReducuer } from "./reducerUser";
 import {
     FETCH_INGRIDIENTS,
     INGREDIENT_DETAILS,
@@ -15,10 +16,9 @@ import {
     DELETE_CONSTRUCTOR_BODY,
     ORDER_DETAILS,
     DND_UPDATE_CONSTRUCTOR_BODY,
-    AUTH_USER,
     } from '../actions/actions';
 
-const initialState = {
+export const initialState = {
     BurgerIngredients: [],
     BurgerConstructorBun: [] as any,
     BurgerConstructorBody: [],
@@ -26,7 +26,7 @@ const initialState = {
     OrderDetails: [] as Array<string>,
     currentTab: 'BUN',
     totalPrice: 0,
-    userInfo: {}
+    auth: {}
 }
 
 const tabSwitchReducer = (state = initialState, action: any) => {
@@ -148,20 +148,6 @@ const orderDetailsReducer = (state = initialState, action: any) => {
         case ORDER_DETAILS: {
             return {
                 OrderDetails: action.OrderDetails,
-            }
-        }
-        default: {
-            return state
-        }
-    }
-}
-
-const userReducuer = (state = initialState, action: any) => {
-    console.log(action)
-    switch(action.type) {
-        case AUTH_USER: {
-            return {
-                userInfo: action.user,
             }
         }
         default: {

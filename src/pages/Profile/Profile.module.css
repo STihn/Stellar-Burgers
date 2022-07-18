@@ -48,3 +48,29 @@
     display: flex;
     justify-content: end;
 }
+
+.wrap_button {
+    width: 480px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.cancel {
+    margin: 0;
+    padding: 0;
+    color: #4C4CFF;
+    width: 60px;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.submit {
+    width: 167px;
+    height: 56px;
+    background: linear-gradient(63.18deg, #801AB3 0%, #4C4CFF 100%);
+    border-radius: 64px;
+    border: 0px;
+    color: #F2F2F3;
+    cursor: pointer;
+}

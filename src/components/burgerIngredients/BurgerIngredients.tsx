@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
 import { useSelector, useDispatch } from 'react-redux';
+import { Link, useHistory, useLocation, useRouteMatch } from "react-router-dom";
 
 import cn from 'classnames';
 import styles from './burgerIngredients.module.css';
@@ -25,7 +26,10 @@ const BurgerIngredients = () => {
     const {currentTab} = useSelector((store: RootState) => store.tabSwitchReducer);
     const {BurgerConstructorBun} = useSelector((store: RootState) => store.burgerConstructorReducer);
     const {BurgerConstructorBody} = useSelector((store: RootState) => store.burgerConstructorReducer);
-
+    const location = useLocation();
+    const history: any = useHistory();
+    const {params} = useRouteMatch();
+    console.log(history, location)
     const [isOpen, setOpen] = useState(false);
 
     const bunRef = useRef<any>(null);
@@ -36,16 +40,25 @@ const BurgerIngredients = () => {
     useEffect(() => {
        dispatch(fetchIngridients())
     }, []);
-
-
+    
+    useEffect(() => {
+        if(!localStorage.getItem('modal')) {
+            const item = JSON.parse(localStorage.getItem('modal') as any)
+            handleOpen(item as any)
+        }
+    }, [])
+    
     const handleOpen = (item: Record<string, any>) => {
         setOpen(true)
         dispatch({type: INGREDIENT_DETAILS, IngredientDetails: item})
+        localStorage.setItem('modal', JSON.stringify(item as any));
     }
 
     const handleClose = () => {
         setOpen(false)
+        history.push('/')
         dispatch({type: DELETE_INGREDIENT_DETAILS, IngredientDetails: []})
+        delete localStorage.modal;
     }
 
     const setCurrent = (value: string) => {
@@ -88,23 +101,59 @@ const BurgerIngredients = () => {
                 <p ref={bunRef} className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Булки</p>
                 <div className={cn(styles.block)}>
                     {BurgerIngredients.map((item:  Record<string, any>) => {
-                        return item.type === 'bun' && <Ingredient data={item} key={item._id} onClick={()=>handleOpen(item)} counter={BurgerConstructorBun}/>
+                        return item.type === 'bun' && 
+                            <Link
+                                key={item._id}
+                                to={{pathname: `/ingredients/${item._id}`, state: { background: location }}} 
+                                className={styles.link}
+                            >
+                                <Ingredient 
+                                    data={item} 
+                                    key={item._id}
+                                    onClick={()=>handleOpen(item)} 
+                                    counter={BurgerConstructorBun}
+                                />
+                            </Link>
                     })}
                 </div>
                 <p ref={sauseRef} className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Соусы</p>
                 <div className={cn(styles.block)}>
                     {BurgerIngredients.map((item:  Record<string, any>) => {
-                        return item.type === 'sauce' &&  <Ingredient data={item} key={item._id} onClick={()=>handleOpen(item)} counter={BurgerConstructorBody}/>
+                        return item.type === 'sauce' &&  
+                            <Link
+                                key={item._id}
+                                to={{pathname: `/ingredients/${item._id}`, state: { background: location }}} 
+                                className={styles.link}
+                            >
+                                <Ingredient
+                                    data={item} 
+                                    key={item._id} 
+                                    onClick={()=>handleOpen(item)} 
+                                    counter={BurgerConstructorBody}
+                                />
+                            </Link>
                     })}
                 </div>
                 <p ref={mainRef} className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Начинки</p>
                 <div className={cn(styles.block)}>
                     {BurgerIngredients.map((item:  Record<string, any>) => {
-                        return item.type === 'main' &&  <Ingredient data={item} key={item._id} onClick={()=>handleOpen(item)} counter={BurgerConstructorBody}/>
+                        return item.type === 'main' &&  
+                            <Link
+                                key={item._id}
+                                to={{pathname: `/ingredients/${item._id}`, state: { background: location }}} 
+                                className={styles.link}
+                            >
+                                <Ingredient 
+                                    data={item} 
+                                    key={item._id}
+                                    onClick={()=>handleOpen(item)} 
+                                    counter={BurgerConstructorBody}
+                                />
+                            </Link>
                     })}
                 </div>
             </div>
-            {isOpen && 
+            {isOpen && history.location.state.background &&
                 <Modal onClose={handleClose} text={'Детали ингредиента'}>
                     <IngredientDetails/>
                 </Modal>

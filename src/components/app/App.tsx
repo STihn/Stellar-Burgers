@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, useLocation } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
@@ -14,37 +14,45 @@ import Register from '../../pages/Register/Register';
 import ForgotPassword from '../../pages/Forgot-password/Forgot-password';
 import ResetPassword from '../../pages/Reset-password/Reset-password';
 import Profile from '../../pages/Profile/Profile';
+import ProtectedRoute from '../protectedRoute/protected-route';
+import ProtectedRouteAuth from '../protectedRouteAuth/protected-route-auth';
+import IngredientPage from '../ingredientPage/ingredientPage';
+import Modal from '../modal/Modal';
 
 const App = () => {
+  const location = useLocation<{background: any, state: any}>();
+  const background = location.state && location.state.background;
+
 
   return (
     <div className={styles.root}>
 
       <DndProvider backend={HTML5Backend}>
         <AppHeader/>
-          <Switch>
-            <Route path='/login' exact>
+          <Switch location={background || location}>
+            <ProtectedRouteAuth path='/login' exact>
               <Login/>
-            </Route>
-            <Route path='/register' exact>
-              <Register/>
-            </Route>
-            <Route path='/forgot-password' exact>
+            </ProtectedRouteAuth>
+            <ProtectedRouteAuth path='/register' exact>
+              <Register/> 
+            </ProtectedRouteAuth>
+            <ProtectedRouteAuth path='/forgot-password' exact>
                 <ForgotPassword/>
-            </Route>
-            <Route path='/reset-password' exact>
+            </ProtectedRouteAuth>
+            <ProtectedRouteAuth path='/reset-password' exact>
                 <ResetPassword/>
-            </Route>
+            </ProtectedRouteAuth>
             <Route path='/ingredients/:id' exact>
+              <IngredientPage/>
             </Route>
-            <Route path='/profile' exact>
+            <ProtectedRoute path='/profile' exact>
                 <Profile/>
-            </Route>
+            </ProtectedRoute>
             <Route path='/' exact>
                 <MainPage/>
             </Route>
             <Route>
-            <NotFoundPage/>
+              <NotFoundPage/>
             </Route>
           </Switch>
       </DndProvider>

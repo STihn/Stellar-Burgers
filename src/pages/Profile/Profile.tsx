@@ -1,27 +1,52 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from './Profile.module.css';
 import cn from 'classnames';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link, NavLink } from "react-router-dom";
-import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
-import { logOut, refreshToken } from "../../services/actions/actions";
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, NavLink, useHistory } from "react-router-dom";
+import { Button, Input } from "@ya.praktikum/react-developer-burger-ui-components";
+import { fetchChangeUser, logOut } from "../../services/Api";
+import { DELETE_USER } from "../../services/actions/actionsUser";
+import { deleteCookie } from "../../utils/utils";
+
+interface RootState {
+    userReducuer: any
+}
 
 
 const Profile: React.FC = ( ) => {
+    const history = useHistory();
     const dispatch = useDispatch();
+    const {auth} = useSelector((store: RootState) => store.userReducuer)
     const [valueName, setValueName] = React.useState('');
     const [valueLogin, setValueLogin] = React.useState('');
     const [valuePassword, setValuePassword] = React.useState('');
+    const infoRegistry: Record<string, any> = {}
 
-    // const onChangeName = (e: any) => {
-    //   setValueName(e.target.value)
-    // }
-    // const onChangelogin = (e: any) => {
-    //     setValueLogin(e.target.value)
-    // }
-    // const onChangepassword = (e: any) => {
-    //     setValuePassword(e.target.value)
-    // }
+    useEffect(() => {
+
+       setValueName(auth.user.name);
+       setValueLogin(auth.user.email) 
+
+     }, []);
+
+    const logOutUser = () => {
+        (logOut() as any)
+        .then((res: any) => {
+            if(res.success){
+                dispatch({type: DELETE_USER})
+                deleteCookie('accessToken')
+                history.push('/login')
+            }
+        }
+    )}
+
+    const changeUser = (e: any) => {
+        e.preventDefault()
+        infoRegistry.name = valueName;
+        infoRegistry.email = valueLogin;
+        infoRegistry.password = valuePassword;
+        fetchChangeUser(infoRegistry)
+    }
 
     return (
         <main className={styles.root}>
@@ -45,14 +70,14 @@ const Profile: React.FC = ( ) => {
                         className={cn(styles.link, 'text text_type_main-medium')}
                         activeClassName='styles.active_link'
                         to={'/login'} 
-                        onClick={()=>dispatch(logOut())}
+                        onClick={()=>logOutUser()}
                     >
                         Выход
                     </NavLink>
                 </div>
                 <p className={cn('text text_type_main-small', styles.text)}>В этом разделе вы можете изменить свои персональные данные</p>
             </div>
-            <div className={cn(styles.block)}>
+            <form className={cn(styles.block)} onSubmit={(e)=> changeUser(e)}>
                 <div className={cn(styles.wrap_input, 'mb-6')}>
                     <Input
                         type={'text'}
@@ -62,8 +87,6 @@ const Profile: React.FC = ( ) => {
                         value={valueName}
                         name={'name'}
                         error={false}
-                        // ref={inputRef}
-                        // onIconClick={onIconClick}
                         errorText={'Ошибка'}
                         size={'default'}
                     />
@@ -77,8 +100,6 @@ const Profile: React.FC = ( ) => {
                         value={valueLogin}
                         name={'Login'}
                         error={false}
-                        // ref={inputRef}
-                        // onIconClick={onIconClick}
                         errorText={'Ошибка'}
                         size={'default'}
                     />
@@ -92,13 +113,16 @@ const Profile: React.FC = ( ) => {
                         value={valuePassword}
                         name={'password'}
                         error={false}
-                        // ref={inputRef}
-                        // onIconClick={onIconClick}
+                        
                         errorText={'Ошибка'}
                         size={'default'}
                     />
                 </div>
-            </div>
+                <div className={cn(styles.wrap_button)}>
+                    <p className={cn(styles.cancel, 'text text_type_main-default')}>Отмена</p>
+                    <button type="submit" className={cn(styles.submit, 'text text_type_main-default')}>Сохранить</button>
+                </div>
+            </form >
         </main>
     )
 }
