@@ -29,7 +29,7 @@ const BurgerIngredients = () => {
     const location = useLocation();
     const history: any = useHistory();
     const {params} = useRouteMatch();
-    console.log(history, location)
+
     const [isOpen, setOpen] = useState(false);
 
     const bunRef = useRef<any>(null);
@@ -42,7 +42,7 @@ const BurgerIngredients = () => {
     }, []);
     
     useEffect(() => {
-        if(!localStorage.getItem('modal')) {
+        if(localStorage.getItem('modal')) {
             const item = JSON.parse(localStorage.getItem('modal') as any)
             handleOpen(item as any)
         }
@@ -153,7 +153,7 @@ const BurgerIngredients = () => {
                     })}
                 </div>
             </div>
-            {isOpen && history.location.state.background &&
+            {isOpen && 
                 <Modal onClose={handleClose} text={'Детали ингредиента'}>
                     <IngredientDetails/>
                 </Modal>

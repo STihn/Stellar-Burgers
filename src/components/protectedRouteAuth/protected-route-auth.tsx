@@ -28,7 +28,7 @@ const ProtectedRouteAuth = (props: any) => {
                 auth.user ? (
                     <Redirect
                         to={{
-                        pathname: '/',
+                        pathname: location?.state?.from.pathname || '/',
                         state: { from: location }
                         }}
                     />

@@ -5,7 +5,7 @@ import cn from "classnames";
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Button, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, useLocation } from "react-router-dom";
 import { login } from "../../services/actions/actionsUser";
 
 interface RootState {
@@ -18,8 +18,8 @@ const Login: React.FC = () => {
     const [valueEmail, setValueEmail] = React.useState('');
     const [valuePassword, setValuePassword] = React.useState('');
     const infoRegistry: Record<string, any> = {}
-
-
+    const location: any = useLocation();
+    
     const loginUser = (e: any) => {
         e.preventDefault();
         infoRegistry.email = valueEmail;
@@ -31,7 +31,7 @@ const Login: React.FC = () => {
         return (
           <Redirect
             to={{
-              pathname: '/'
+              pathname: `${location?.state?.from?.pathname}`
             }}
           />
         );
