@@ -16,6 +16,9 @@ import {
     DELETE_CONSTRUCTOR_BODY,
     ORDER_DETAILS,
     DND_UPDATE_CONSTRUCTOR_BODY,
+    CLEAR_CONSTRUCTOR,
+    CLEAR_ORDER_DETAILS,
+    CLEAR_TOTAL_PRICE
     } from '../actions/actions';
 
 export const initialState = {
@@ -121,6 +124,13 @@ const burgerConstructorReducer = (state = initialState, action: any) => {
                 BurgerConstructorBody: action.newCards
             }
         }
+        case CLEAR_CONSTRUCTOR: {
+            return {
+                ...state,
+                BurgerConstructorBun: [],
+                BurgerConstructorBody: []
+            }
+        }
       default: {
           return state
       }
@@ -135,8 +145,14 @@ const totalPriceReducer = (state = initialState, action: any) => {
         return { totalPrice: state.totalPrice + action.price };
       case DECREMENT_BUN:
         return { totalPrice: state.totalPrice - action.BurgerConstructorBun.map((item: any) => item.price*2)};
-        case DECREMENT_BODY:
+      case DECREMENT_BODY:
         return { totalPrice: state.totalPrice - action.item.price};
+      case CLEAR_TOTAL_PRICE: {
+        return {
+            ...state,
+            totalPrice: 0
+        }
+      }
       default: {
           return state
       }
@@ -148,6 +164,12 @@ const orderDetailsReducer = (state = initialState, action: any) => {
         case ORDER_DETAILS: {
             return {
                 OrderDetails: action.OrderDetails,
+            }
+        }
+        case CLEAR_ORDER_DETAILS: {
+            return {
+                ...state,
+                OrderDetails: []
             }
         }
         default: {

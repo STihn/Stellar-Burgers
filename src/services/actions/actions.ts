@@ -14,6 +14,9 @@ export const DECREMENT_BODY = 'DECREMENT_BODY';
 export const DELETE_CONSTRUCTOR_BODY = 'DELETE_CONSTRUCTOR_BODY';
 export const ORDER_DETAILS = 'ORDER_DETAILS';
 export const DND_UPDATE_CONSTRUCTOR_BODY = 'DND_UPDATE_CONSTRUCTOR_BODY';
+export const CLEAR_CONSTRUCTOR = 'CLEAR_CONSTRUCTOR';
+export const CLEAR_ORDER_DETAILS = 'CLEAR_ORDER_DETAILS';
+export const CLEAR_TOTAL_PRICE = 'CLEAR_TOTAL_PRICE';
 
 export const baseUrl = 'https://norma.nomoreparties.space/api';
 
@@ -49,7 +52,9 @@ export function fetchOrderDetails(item: Array<string>) {
                 body: JSON.stringify(item)
             });
             const result = await _checkResponse(res);
-            return await dispatch({type: ORDER_DETAILS, OrderDetails: result})
+            dispatch({type: ORDER_DETAILS, OrderDetails: result})
+            dispatch({type: CLEAR_CONSTRUCTOR})
+            dispatch({type: CLEAR_TOTAL_PRICE})
         }
         catch(err) {
             console.log(err)

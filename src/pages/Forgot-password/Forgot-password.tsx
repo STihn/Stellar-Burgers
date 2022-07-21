@@ -2,23 +2,24 @@ import React from "react";
 import styles from './Forgot-password.module.css';
 import cn from 'classnames';
 import { Button, Input } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { forgotPassword } from "../../services/Api";
 
 
 const ForgotPassword: React.FC = () => {
     const history = useHistory();
+    const location = useLocation();
     const inputRef = React.useRef(null);
     const [valueEmail, setValueEmail] = React.useState('');
     const infoRegistry: Record<string, any> = {}
-
+  
     const ForgotUser = (e: any) => {
         e.preventDefault()
         infoRegistry.email = valueEmail;
         (forgotPassword(infoRegistry) as any)
         .then((res: any) => {
             if(res.success) {
-                history.push('/reset-password')
+                history.push('/reset-password', {forgot: location})
             }
         })
     }

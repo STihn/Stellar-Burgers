@@ -1,4 +1,4 @@
-import React, {useCallback } from "react";
+import React, {useCallback, useState } from "react";
 import cn from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop, useDrag } from "react-dnd";
@@ -21,8 +21,11 @@ import { UPDATE_CONSTRUCTOR_BUN,
     DECREMENT_BODY, 
     DELETE_CONSTRUCTOR_BODY,
     fetchOrderDetails,
-    DND_UPDATE_CONSTRUCTOR_BODY
+    DND_UPDATE_CONSTRUCTOR_BODY,
+    CLEAR_ORDER_DETAILS
 } from '../../services/actions/actions';
+import { getCookie } from "../../utils/utils";
+import { useHistory } from "react-router-dom";
 
 interface RootState {
     burgerConstructorReducer: any,
@@ -32,24 +35,32 @@ interface RootState {
 
 const BurgerConstructor: React.FC = () => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const {BurgerConstructorBun} = useSelector((store: RootState) => store.burgerConstructorReducer);
     const {BurgerConstructorBody} = useSelector((store: RootState) => store.burgerConstructorReducer);
     const {totalPrice} = useSelector((store: RootState) => store.totalPriceReducer);
+    const token = getCookie('accessToken');
 
     const [isOpen, setOpen] = React.useState(false);
 
     const handleOpen = () => {
-        setOpen(true)
-        const arrMenu = BurgerConstructorBun.concat(BurgerConstructorBody);
-        const data = { "ingredients": arrMenu.map((item: any) => {
-                return item._id
-            })
+        if(!token) {
+            history.push('/login')
+        }else {
+            setOpen(true)
+            const arrMenu = BurgerConstructorBun.concat(BurgerConstructorBody);
+            const data = { "ingredients": arrMenu.map((item: any) => {
+                    return item._id
+                })
+            }
+            dispatch(fetchOrderDetails(data as any))
         }
-        dispatch(fetchOrderDetails(data as any))
+
     }
 
     const handleClose = () => {
         setOpen(false)
+        dispatch({type: CLEAR_ORDER_DETAILS})
     }
 
     const deleteIngredient = (id: string) => {
@@ -141,7 +152,6 @@ const BurgerConstructor: React.FC = () => {
                                         handleClose={()=>deleteIngredient(item.id)} 
                                         idx={index}
                                     />
-
                                 )
                             })
                         }
@@ -151,7 +161,14 @@ const BurgerConstructor: React.FC = () => {
                 <div className={cn(styles.total, 'mr-4')}>
                     <span className={cn(styles.price, 'text text_type_digits-default')}>{totalPrice}</span>
                     <CurrencyIcon type="primary" />
-                    <Button text={'оформить заказ'} className={cn(styles.button, 'ml-10', 'text text_type_main-default')} onClick={handleOpen}/>
+                    {(BurgerConstructorBun.length === 0 || BurgerConstructorBody.length === 0) ? 
+                    (
+                        <Button text={'оформить заказ'} className={cn(styles.button_disabled, 'ml-10', 'text text_type_main-default')}/>
+                    ) : (
+                        <Button text={'оформить заказ'} className={cn(styles.button, 'ml-10', 'text text_type_main-default')} onClick={handleOpen}/>
+                        )
+                    }
+                    
                 </div>
             </section>
             {isOpen && 

@@ -1,17 +1,24 @@
-import React from "react";
+import React, {useEffect} from "react";
 import styles from "./Reset-password.module.css";
 import cn from "classnames";
 import { Button, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { resetPassword } from "../../services/Api";
 
 
 
 const ResetPassword: React.FC = () => {
-    const history = useHistory();
+    const history: any = useHistory();
+    const location: any = useLocation();
     const [valueToken, setValueToken] = React.useState('');
     const [valuePassword, setValuePassword] = React.useState('');
     const infoRegistry: Record<string, any> = {};
+
+    useEffect(() => {
+        if(location.state === undefined) {
+            history.push('/forgot-password')
+        }
+    }, [])
 
     const ResetPass = (e: any) => {
         e.preventDefault();
