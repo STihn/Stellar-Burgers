@@ -1,27 +1,62 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter, Route, Switch, useLocation } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 import styles from'./app.module.css';
 
 import AppHeader from '../app-header/AppHeader';
-import BurgerIngredients from '../burgerIngredients/BurgerIngredients';
-import BurgerConstructor from '../burgerConstructor/BurgerConstructor';
+import MainPage from '../../pages/MainPage/MainPage';
+import NotFoundPage from '../../pages/NotFoundPage/NotFoundPage';
+import Login from '../../pages/Login/Login';
+import Register from '../../pages/Register/Register';
+import ForgotPassword from '../../pages/Forgot-password/Forgot-password';
+import ResetPassword from '../../pages/Reset-password/Reset-password';
+import Profile from '../../pages/Profile/Profile';
+import ProtectedRoute from '../protectedRoute/protected-route';
+import ProtectedRouteAuth from '../protectedRouteAuth/protected-route-auth';
+import IngredientPage from '../ingredientPage/ingredientPage';
+import Modal from '../modal/Modal';
 
 const App = () => {
+  const location = useLocation<{background: any, state: any}>();
+  const background = location.state && location.state.background;
+
 
   return (
     <div className={styles.root}>
-      <AppHeader/>
+
       <DndProvider backend={HTML5Backend}>
-        <main className={styles.main}>
-          <BurgerIngredients />
-          <BurgerConstructor />
-        </main>
+        <AppHeader/>
+          <Switch location={background || location}>
+            <ProtectedRouteAuth path='/login' exact>
+              <Login/>
+            </ProtectedRouteAuth>
+            <ProtectedRouteAuth path='/register' exact>
+              <Register/> 
+            </ProtectedRouteAuth>
+            <ProtectedRouteAuth path='/forgot-password' exact>
+                <ForgotPassword/>
+            </ProtectedRouteAuth>
+            <ProtectedRouteAuth path='/reset-password' exact>
+                <ResetPassword/>
+            </ProtectedRouteAuth>
+            <Route path='/ingredients/:id' exact>
+              <IngredientPage/>
+            </Route>
+            <ProtectedRoute path='/profile' exact>
+                <Profile/>
+            </ProtectedRoute>
+            <Route path='/' exact>
+                <MainPage/>
+            </Route>
+            <Route>
+              <NotFoundPage/>
+            </Route>
+          </Switch>
       </DndProvider>
     </div>
-
   );
 }
 

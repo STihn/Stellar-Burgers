@@ -54,6 +54,13 @@
     cursor: pointer;
 }
 
+.button_disabled {
+    background: grey;
+    border-radius: 64px;
+    padding: 20px 40px;
+    /* cursor: pointer; */
+}
+
 .wrap_top {
     border-radius: 88px 88px 40px 40px;
     background: #1C1C21;

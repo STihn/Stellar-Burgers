@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { userReducuer } from "./reducerUser";
 import {
     FETCH_INGRIDIENTS,
     INGREDIENT_DETAILS,
@@ -15,16 +16,20 @@ import {
     DELETE_CONSTRUCTOR_BODY,
     ORDER_DETAILS,
     DND_UPDATE_CONSTRUCTOR_BODY,
+    CLEAR_CONSTRUCTOR,
+    CLEAR_ORDER_DETAILS,
+    CLEAR_TOTAL_PRICE
     } from '../actions/actions';
 
-const initialState = {
+export const initialState = {
     BurgerIngredients: [],
     BurgerConstructorBun: [] as any,
     BurgerConstructorBody: [],
     IngredientDetails: [],
     OrderDetails: [] as Array<string>,
     currentTab: 'BUN',
-    totalPrice: 0
+    totalPrice: 0,
+    auth: {}
 }
 
 const tabSwitchReducer = (state = initialState, action: any) => {
@@ -119,6 +124,13 @@ const burgerConstructorReducer = (state = initialState, action: any) => {
                 BurgerConstructorBody: action.newCards
             }
         }
+        case CLEAR_CONSTRUCTOR: {
+            return {
+                ...state,
+                BurgerConstructorBun: [],
+                BurgerConstructorBody: []
+            }
+        }
       default: {
           return state
       }
@@ -133,8 +145,14 @@ const totalPriceReducer = (state = initialState, action: any) => {
         return { totalPrice: state.totalPrice + action.price };
       case DECREMENT_BUN:
         return { totalPrice: state.totalPrice - action.BurgerConstructorBun.map((item: any) => item.price*2)};
-        case DECREMENT_BODY:
+      case DECREMENT_BODY:
         return { totalPrice: state.totalPrice - action.item.price};
+      case CLEAR_TOTAL_PRICE: {
+        return {
+            ...state,
+            totalPrice: 0
+        }
+      }
       default: {
           return state
       }
@@ -148,17 +166,23 @@ const orderDetailsReducer = (state = initialState, action: any) => {
                 OrderDetails: action.OrderDetails,
             }
         }
+        case CLEAR_ORDER_DETAILS: {
+            return {
+                ...state,
+                OrderDetails: []
+            }
+        }
         default: {
             return state
         }
     }
 }
 
-
 export const rootReducer = combineReducers({
     burgerReducer,
     tabSwitchReducer,
     burgerConstructorReducer,
     totalPriceReducer,
-    orderDetailsReducer
+    orderDetailsReducer,
+    userReducuer
 })

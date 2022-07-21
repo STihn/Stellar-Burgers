@@ -1,0 +1,76 @@
+.root {
+    min-width: 860px;
+    height: 330px;
+    margin: 180px auto 0px;
+    display: flex;
+}
+
+.wrap {
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+}
+
+.block {
+    display: flex;
+    flex-direction: column;
+    width: 480px;
+}
+
+.link {
+    width: 320px;
+    min-height: 64px;
+    text-decoration: none;
+    color: #8585AD;
+}
+
+.active_link {
+    color: #F2F2F3;
+}
+
+.text {
+    color: #8585AD;
+    opacity: 0.4;
+    width: 320px;
+    min-height: 48px;
+}
+
+.wrap_input div {
+    width: 100%;
+}
+
+.wrap_input > input {
+    width: 400px;
+}
+
+.wrap_input div div div {
+    width: 100px;
+    display: flex;
+    justify-content: end;
+}
+
+.wrap_button {
+    width: 480px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.cancel {
+    margin: 0;
+    padding: 0;
+    color: #4C4CFF;
+    width: 60px;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.submit {
+    width: 167px;
+    height: 56px;
+    background: linear-gradient(63.18deg, #801AB3 0%, #4C4CFF 100%);
+    border-radius: 64px;
+    border: 0px;
+    color: #F2F2F3;
+    cursor: pointer;
+}

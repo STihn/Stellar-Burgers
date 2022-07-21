@@ -64,4 +64,6 @@
     border-bottom: 2px solid #131316;
 }
 
-  
+.link {
+    text-decoration: none;
+}
