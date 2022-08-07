@@ -3,7 +3,7 @@ import cn from 'classnames';
 
 import styles from './ingredientDetails.module.css';
 import {IData} from '../../utils/types';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 interface IProps {
     state: IData;
     burgerReducer: any

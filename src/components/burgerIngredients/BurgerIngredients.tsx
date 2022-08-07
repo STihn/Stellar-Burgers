@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useHistory, useLocation, useRouteMatch } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 
 import cn from 'classnames';
 import styles from './burgerIngredients.module.css';
@@ -20,6 +20,21 @@ interface RootState {
     burgerConstructorReducer: any
 }
 
+export interface IItem {
+    calories: number,
+    carbohydrates: number,
+    fat: number,
+    image: string,
+    image_large: string,
+    image_mobile: string,
+    name: string,
+    price: number,
+    proteins: number,
+    type: string,
+    __v: number,
+    _id: string
+}
+
 const BurgerIngredients = () => {
     const dispatch = useDispatch();
     const {BurgerIngredients} = useSelector((store: RootState) => store.burgerReducer);
@@ -27,15 +42,14 @@ const BurgerIngredients = () => {
     const {BurgerConstructorBun} = useSelector((store: RootState) => store.burgerConstructorReducer);
     const {BurgerConstructorBody} = useSelector((store: RootState) => store.burgerConstructorReducer);
     const location = useLocation();
-    const history: any = useHistory();
-    const {params} = useRouteMatch();
+    const history = useHistory();
 
     const [isOpen, setOpen] = useState(false);
 
-    const bunRef = useRef<any>(null);
-    const sauseRef = useRef<any>(null);
-    const mainRef = useRef<any>(null);
-    const scrollRef = useRef<any>(null);
+    const bunRef = useRef<HTMLParagraphElement| null>(null);
+    const sauseRef = useRef<HTMLParagraphElement| null>(null);
+    const mainRef = useRef<HTMLParagraphElement| null>(null);
+    const scrollRef = useRef<HTMLDivElement| null>(null);
     
     useEffect(() => {
        dispatch(fetchIngridients())
@@ -43,15 +57,15 @@ const BurgerIngredients = () => {
     
     useEffect(() => {
         if(localStorage.getItem('modal')) {
-            const item = JSON.parse(localStorage.getItem('modal') as any)
-            handleOpen(item as any)
+            const item: IItem = JSON.parse(localStorage.getItem('modal') as string)
+            handleOpen(item)
         }
     }, [])
     
     const handleOpen = (item: Record<string, any>) => {
         setOpen(true)
         dispatch({type: INGREDIENT_DETAILS, IngredientDetails: item})
-        localStorage.setItem('modal', JSON.stringify(item as any));
+        localStorage.setItem('modal', JSON.stringify(item));
     }
 
     const handleClose = () => {
@@ -66,7 +80,7 @@ const BurgerIngredients = () => {
     }
 
     const handleScroll = () => {
-        const scrollTop = scrollRef.current.scrollTop;
+        const scrollTop: number = (scrollRef.current as HTMLDivElement).scrollTop;
 
         if(scrollTop ===  0) {
             dispatch({type: TAB_BUN, currentTab: 'BUN'});
@@ -79,9 +93,9 @@ const BurgerIngredients = () => {
         }
     };
 
-    const bunScroll = () => bunRef.current.scrollIntoView();
-    const sauseScroll = () => sauseRef.current.scrollIntoView();
-    const mainScroll = () => mainRef.current.scrollIntoView();
+    const bunScroll = () => (bunRef.current as HTMLParagraphElement).scrollIntoView();
+    const sauseScroll = () => (sauseRef.current as HTMLParagraphElement).scrollIntoView();
+    const mainScroll = () => (mainRef.current as HTMLParagraphElement).scrollIntoView();
 
     return (
         <section className={cn(styles.body, 'mb-10')}>

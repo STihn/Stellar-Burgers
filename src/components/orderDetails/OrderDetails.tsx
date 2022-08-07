@@ -9,7 +9,7 @@ import imageModal from '../../images/done.gif';
 interface RootState {
     orderDetailsReducer: any
 }
-const OrderDetails = () => {
+const OrderDetails: React.FC = () => {
     const {OrderDetails} = useSelector((store: RootState) => store.orderDetailsReducer)
     const {order} = OrderDetails;
     return (

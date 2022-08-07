@@ -6,18 +6,26 @@ import { useDrop, useDrag } from "react-dnd";
 
 import {ConstructorElement, DragIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 
+import IIngredients from '../burgerConstructor/BurgerConstructor'
 interface IProps {
-    key?: any
-    moveCard?: any
+    key?: string
+    moveCard?: any,
     handleClose?: any
-    item?: any
-    idx?: any
+    idx?: number,
+    item: any
 }
 
-const ConstructorCard = (props: IProps) => {
+interface IHoverItem {
+    id: string,
+    idx: number,
+    index: number
+}
+
+const ConstructorCard: React.FC<IProps> = (props) => {
     const {item, handleClose, idx, moveCard } = props;
     const {id} = item;
-    const ref = useRef<any>(null);
+    const ref = useRef<HTMLDivElement | null>(null);
+
 
     const [ { handlerId }, drop] = useDrop({
         accept: `ingridientCard`,
@@ -32,7 +40,7 @@ const ConstructorCard = (props: IProps) => {
             }
             
             const dragIndex = item.idx;
-            const hoverIndex = idx;
+            const hoverIndex: number | undefined = idx;
 
             if(dragIndex === hoverIndex) {
                 return;
@@ -45,17 +53,16 @@ const ConstructorCard = (props: IProps) => {
 
             const clientOffset = monitor.getClientOffset();
 
-            const hoverClientY = (clientOffset as any).y - hoverBoundingRect.top;
+            const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
 
-            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+            if (dragIndex < (hoverIndex as number) && hoverClientY < hoverMiddleY) {
                 return
             }
 
-            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+            if (dragIndex > (hoverIndex as number) && hoverClientY > hoverMiddleY) {
                 return
             }
             moveCard(dragIndex, hoverIndex);
-
 
             item.index = hoverIndex;
         }
@@ -82,7 +89,7 @@ const ConstructorCard = (props: IProps) => {
                 text={item.name}
                 price={item.price}
                 thumbnail={item.image}
-                handleClose={()=>handleClose(item.id)}
+                handleClose={() => handleClose(item.id)}
             />
         </div>
     )

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { FormEvent, useEffect } from "react";
 import styles from './Profile.module.css';
 import cn from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,9 +17,9 @@ const Profile: React.FC = ( ) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const {auth} = useSelector((store: RootState) => store.userReducuer)
-    const [valueName, setValueName] = React.useState('');
-    const [valueLogin, setValueLogin] = React.useState('');
-    const [valuePassword, setValuePassword] = React.useState('');
+    const [valueName, setValueName] = React.useState<string>('');
+    const [valueLogin, setValueLogin] = React.useState<string>('');
+    const [valuePassword, setValuePassword] = React.useState<string>('');
     const infoRegistry: Record<string, any> = {}
 
     useEffect(() => {
@@ -30,8 +30,8 @@ const Profile: React.FC = ( ) => {
      }, []);
 
     const logOutUser = () => {
-        (logOut() as any)
-        .then((res: any) => {
+        (logOut())
+        .then((res: {success: boolean, message: string}) => {
             if(res.success){
                 dispatch({type: DELETE_USER})
                 deleteCookie('accessToken')
@@ -40,7 +40,7 @@ const Profile: React.FC = ( ) => {
         }
     )}
 
-    const changeUser = (e: any) => {
+    const changeUser = (e: FormEvent) => {
         e.preventDefault()
         infoRegistry.name = valueName;
         infoRegistry.email = valueLogin;

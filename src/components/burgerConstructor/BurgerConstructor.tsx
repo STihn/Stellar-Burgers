@@ -32,6 +32,16 @@ interface RootState {
     totalPriceReducer: any
 }
 
+export interface IIngredients {
+    count: number,
+    id: string,
+    image: string,
+    name: string,
+    price: number,
+    type: string,
+    _id: string
+}
+
 
 const BurgerConstructor: React.FC = () => {
     const dispatch = useDispatch();
@@ -41,7 +51,7 @@ const BurgerConstructor: React.FC = () => {
     const {totalPrice} = useSelector((store: RootState) => store.totalPriceReducer);
     const token = getCookie('accessToken');
 
-    const [isOpen, setOpen] = React.useState(false);
+    const [isOpen, setOpen] = React.useState<boolean>(false);
 
     const handleOpen = () => {
         if(!token) {
@@ -49,11 +59,12 @@ const BurgerConstructor: React.FC = () => {
         }else {
             setOpen(true)
             const arrMenu = BurgerConstructorBun.concat(BurgerConstructorBody);
-            const data = { "ingredients": arrMenu.map((item: any) => {
-                    return item._id
+            const data = {
+                "ingredients": arrMenu.map((item: IIngredients) => {
+                    return item._id;
                 })
-            }
-            dispatch(fetchOrderDetails(data as any))
+            } as unknown as string[]
+            dispatch(fetchOrderDetails(data))
         }
 
     }
@@ -64,7 +75,7 @@ const BurgerConstructor: React.FC = () => {
     }
 
     const deleteIngredient = (id: string) => {
-        BurgerConstructorBody.map((item: any, index: number) => {
+        BurgerConstructorBody.map((item: IIngredients, index: number) => {
             if(item.id === id) {
                 dispatch({type: DELETE_CONSTRUCTOR_BODY, index})
                 dispatch({type: DECREMENT_BODY, item})
@@ -74,7 +85,7 @@ const BurgerConstructor: React.FC = () => {
 
     const [, dropTarget] = useDrop({
         accept: 'ingridient',
-        drop(data: any) {
+        drop(data: IIngredients) {
             data.id = uuidv4();
             data.count = 0;
             if(data.type === 'bun') {
@@ -83,7 +94,7 @@ const BurgerConstructor: React.FC = () => {
                 if(BurgerConstructorBun.length === 0) {
                     dispatch({type: INCREMENT_BUN, data})
                 }else {
-                    BurgerConstructorBun.map((element: any) => {
+                    BurgerConstructorBun.map((element: IIngredients) => {
                         if(element._id !== data._id) {
                             dispatch({type: DECREMENT_BUN, BurgerConstructorBun});
                             dispatch({type: INCREMENT_BUN, data});
@@ -100,7 +111,7 @@ const BurgerConstructor: React.FC = () => {
         }
     })
 
-    const moveCard = (dragIdex: any, hoverIndex: any) => {
+    const moveCard = (dragIdex: number, hoverIndex: number) => {
         const dragCard = BurgerConstructorBody[dragIdex];
         const newCards = BurgerConstructorBody;
         newCards.splice(dragIdex, 1);
@@ -110,7 +121,7 @@ const BurgerConstructor: React.FC = () => {
     }
     const moveRow = useCallback(debounce(moveCard, 300), [BurgerConstructorBody]);
 
-    const bunConstructor = (type: any) => {
+    const bunConstructor = (type: 'top' | 'bottom' | undefined) => {
         if(BurgerConstructorBun.length === 0) {
             return (
                 <div className={cn(styles.wrap, type === 'top' ? styles.wrap_top : styles.wrap_button)}>
@@ -119,7 +130,7 @@ const BurgerConstructor: React.FC = () => {
             )
         }
         else {
-            return BurgerConstructorBun.map((item: any) => {
+            return BurgerConstructorBun.map((item: IIngredients) => {
                 return(
                     <div className={cn(styles.wrap)}  key={item.id}>
                         <ConstructorElement
@@ -143,7 +154,7 @@ const BurgerConstructor: React.FC = () => {
                     <div className={cn(styles.wrapper, BurgerConstructorBody.length === 0 ? styles.wrap_main : null, 'mt-4', 'mb-4')}>
                         {BurgerConstructorBody.length === 0 ?
                             <p>начинка у бургерa</p> :
-                            BurgerConstructorBody.map((item: any, index: number) => {
+                            BurgerConstructorBody.map((item: IIngredients, index: number) => {
                                 return(
                                     <ConstructorCard 
                                         key={item.id} 
