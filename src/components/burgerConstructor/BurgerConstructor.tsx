@@ -26,20 +26,11 @@ import { UPDATE_CONSTRUCTOR_BUN,
 } from '../../services/actions/actions';
 import { getCookie } from "../../utils/utils";
 import { useHistory } from "react-router-dom";
+import {IIngredients} from '../../utils/types'
 
 interface RootState {
     burgerConstructorReducer: any,
     totalPriceReducer: any
-}
-
-export interface IIngredients {
-    count: number,
-    id: string,
-    image: string,
-    name: string,
-    price: number,
-    type: string,
-    _id: string
 }
 
 

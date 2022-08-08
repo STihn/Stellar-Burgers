@@ -10,4 +10,13 @@ export interface IData {
     _id?: string,
     count?: number
 }
-  
+
+export interface IIngredients {
+    count: number,
+    id: string,
+    image: string,
+    name: string,
+    price: number,
+    type: string,
+    _id: string
+}

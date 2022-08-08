@@ -6,8 +6,8 @@ import styles from './ingredient.module.css';
 import {IData} from '../../utils/types';
 
 import {CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components';
-import { IItem } from "../burgerIngredients/BurgerIngredients";
-import { IIngredients } from "../burgerConstructor/BurgerConstructor";
+
+import { IIngredients } from "../../utils/types";
 
 
 interface IFindIngredients extends IIngredients {

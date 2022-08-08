@@ -12,12 +12,14 @@ import Modal from '../modal/Modal';
 import IngredientDetails from '../ingredientDetails/IngredientDetails';
 import { fetchIngridients } from '../../services/actions/actions';
 import { INGREDIENT_DETAILS, DELETE_INGREDIENT_DETAILS, TAB_BUN, TAB_SAUSE, TAB_MAIN } from '../../services/actions/actions';
+import { Spinner } from "../spinner/spinner";
 
 interface RootState {
     BurgerIngredients: any,
     burgerReducer: any,
     tabSwitchReducer: any,
-    burgerConstructorReducer: any
+    burgerConstructorReducer: any,
+    spinnerReducer: any
 }
 
 export interface IItem {
@@ -41,6 +43,8 @@ const BurgerIngredients = () => {
     const {currentTab} = useSelector((store: RootState) => store.tabSwitchReducer);
     const {BurgerConstructorBun} = useSelector((store: RootState) => store.burgerConstructorReducer);
     const {BurgerConstructorBody} = useSelector((store: RootState) => store.burgerConstructorReducer);
+    const {spinner} = useSelector((store: RootState) => store.spinnerReducer);
+
     const location = useLocation();
     const history = useHistory();
 
@@ -111,7 +115,8 @@ const BurgerIngredients = () => {
                     <p className={cn(styles.tab_text, 'text text_type_main-default', currentTab === 'MAIN' && 'tab_text-active')} onClick={mainScroll}>Начинки</p>
                 </Tab>
             </div>
-            <div className={styles.inner} ref={scrollRef} onScroll={handleScroll}>
+            {spinner ? <Spinner/> : 
+            (<div className={styles.inner} ref={scrollRef} onScroll={handleScroll}>
                 <p ref={bunRef} className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Булки</p>
                 <div className={cn(styles.block)}>
                     {BurgerIngredients.map((item:  Record<string, any>) => {
@@ -166,7 +171,8 @@ const BurgerIngredients = () => {
                             </Link>
                     })}
                 </div>
-            </div>
+            </div>)
+            }
             {isOpen && 
                 <Modal onClose={handleClose} text={'Детали ингредиента'}>
                     <IngredientDetails/>

@@ -6,7 +6,6 @@ import { useDrop, useDrag } from "react-dnd";
 
 import {ConstructorElement, DragIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 
-import IIngredients from '../burgerConstructor/BurgerConstructor'
 interface IProps {
     key?: string
     moveCard?: any,
