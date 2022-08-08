@@ -7,19 +7,24 @@ import {IData} from '../../utils/types';
 
 import {CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components';
 
+import { IIngredients } from "../../utils/types";
+
+
+interface IFindIngredients extends IIngredients {
+    count: number
+}
 interface IProps {
     data: IData,
-    counter?: any
+    counter: Array<IFindIngredients>
     onClick: () => void
 }
 
-interface RootState {
-    burgerConstructorReducer: any
-}
+
 
 const Ingredient = (props: IProps) => {
     const {image, type, price, name, _id} = props.data;
     const {counter} = props;
+
     const count = counter?.length === 0 ? 0 : counter.length;
     
     const [{isDrag}, dragRef] = useDrag({
@@ -38,13 +43,13 @@ const Ingredient = (props: IProps) => {
             return _id === counter[0]._id
         }
         else {
-            counter.map((item: any) => {
+            counter.map((item) => {
                 if(item._id === _id) {
                     result += item.count
                 }
                 return null
             })
-            return counter.find((item: any) => item._id === _id)
+            return counter.find((item) => item._id === _id)
         }
     }
 

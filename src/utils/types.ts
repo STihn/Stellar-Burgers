@@ -8,6 +8,15 @@ export interface IData {
     carbohydrates?: number;
     calories?: number;
     _id?: string,
-    count?: any
+    count?: number
 }
-  
+
+export interface IIngredients {
+    count: number,
+    id: string,
+    image: string,
+    name: string,
+    price: number,
+    type: string,
+    _id: string
+}

@@ -38,7 +38,7 @@ export function logOut() {
 
 }
 
-export function fetchChangeUser(props: any) {
+export function fetchChangeUser(props: object) {
     return fetch(`${baseUrl}/auth/user`, {
         method: 'PATCH',
         headers: {

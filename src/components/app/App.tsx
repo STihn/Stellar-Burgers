@@ -1,6 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Switch, useLocation } from "react-router-dom";
+import React, { FC } from 'react';
+import { Route, Switch, useLocation } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
@@ -17,10 +16,22 @@ import Profile from '../../pages/Profile/Profile';
 import ProtectedRoute from '../protectedRoute/protected-route';
 import ProtectedRouteAuth from '../protectedRouteAuth/protected-route-auth';
 import IngredientPage from '../ingredientPage/ingredientPage';
-import Modal from '../modal/Modal';
 
-const App = () => {
-  const location = useLocation<{background: any, state: any}>();
+
+interface IState extends ILocation {
+
+  background: ILocation
+}
+export interface ILocation {
+  hash: string,
+  key: string,
+  pathname: string,
+  search: string,
+  state: IState
+}
+
+const App: FC = () => {
+  const location = useLocation<IState>();
   const background = location.state && location.state.background;
 
 

@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { FormEvent } from "react";
 import styles from './Login.module.css';
 import cn from "classnames";
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,20 +7,24 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Button, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, Redirect, useLocation } from "react-router-dom";
 import { login } from "../../services/actions/actionsUser";
+import { ILocation } from "../../components/app/App";
 
 interface RootState {
     userReducuer: any
 }
 
+interface ILogin extends ILocation {
+    from: ILocation
+}
+
 const Login: React.FC = () => {
     const dispatch = useDispatch();
     const {auth} = useSelector((store: RootState) => store.userReducuer)
-    const [valueEmail, setValueEmail] = React.useState('');
-    const [valuePassword, setValuePassword] = React.useState('');
+    const [valueEmail, setValueEmail] = React.useState<string>('');
+    const [valuePassword, setValuePassword] = React.useState<string>('');
     const infoRegistry: Record<string, any> = {}
-    const location: any = useLocation();
-    
-    const loginUser = (e: any) => {
+    const location = useLocation<ILogin>();
+    const loginUser = (e: FormEvent) => {
         e.preventDefault();
         infoRegistry.email = valueEmail;
         infoRegistry.password = valuePassword;

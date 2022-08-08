@@ -29,7 +29,8 @@ export const initialState = {
     OrderDetails: [] as Array<string>,
     currentTab: 'BUN',
     totalPrice: 0,
-    auth: {}
+    auth: {},
+    spinner: false
 }
 
 const tabSwitchReducer = (state = initialState, action: any) => {
@@ -178,11 +179,18 @@ const orderDetailsReducer = (state = initialState, action: any) => {
     }
 }
 
+const spinnerReducer = (state = initialState, action: any) => {
+        return {
+            spinner: action.action
+        }
+}
+
 export const rootReducer = combineReducers({
     burgerReducer,
     tabSwitchReducer,
     burgerConstructorReducer,
     totalPriceReducer,
     orderDetailsReducer,
-    userReducuer
+    userReducuer,
+    spinnerReducer
 })

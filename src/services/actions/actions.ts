@@ -17,10 +17,11 @@ export const DND_UPDATE_CONSTRUCTOR_BODY = 'DND_UPDATE_CONSTRUCTOR_BODY';
 export const CLEAR_CONSTRUCTOR = 'CLEAR_CONSTRUCTOR';
 export const CLEAR_ORDER_DETAILS = 'CLEAR_ORDER_DETAILS';
 export const CLEAR_TOTAL_PRICE = 'CLEAR_TOTAL_PRICE';
+export const SPINNER = 'SPINNER';
 
 export const baseUrl = 'https://norma.nomoreparties.space/api';
 
-export const _checkResponse = (res: any) => {
+export const _checkResponse = (res: Response) => {
     if(res.ok) {
         return  res.json();
     }
@@ -30,20 +31,26 @@ export const _checkResponse = (res: any) => {
 export function fetchIngridients() {
     return async (dispatch: Function) => {
         try{
+            dispatch({type: SPINNER, action: true})
             const res = await fetch(`${baseUrl}/ingredients`);
             const result = await _checkResponse(res);
-            return await dispatch({type: FETCH_INGRIDIENTS, BurgerIngredients: result.data})
+            await dispatch({type: FETCH_INGRIDIENTS, BurgerIngredients: result.data})
+            if(res.ok) {
+                dispatch({type: SPINNER, action: false})
+            }
+            
         }
         catch(err) {
             console.log(err)
         }
-        
-    } 
+    }
+    
 }
 
 export function fetchOrderDetails(item: Array<string>) {
     return async (dispatch: Function) => {
         try {
+            dispatch({type: SPINNER, action: true})
             const res = await fetch(`${baseUrl}/orders`, {
                 method: 'POST',
                 headers: {
@@ -55,6 +62,9 @@ export function fetchOrderDetails(item: Array<string>) {
             dispatch({type: ORDER_DETAILS, OrderDetails: result})
             dispatch({type: CLEAR_CONSTRUCTOR})
             dispatch({type: CLEAR_TOTAL_PRICE})
+            if(res.ok) {
+                dispatch({type: SPINNER, action: false})
+            }
         }
         catch(err) {
             console.log(err)

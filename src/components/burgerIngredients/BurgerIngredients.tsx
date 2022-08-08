@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useHistory, useLocation, useRouteMatch } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 
 import cn from 'classnames';
 import styles from './burgerIngredients.module.css';
@@ -12,12 +12,29 @@ import Modal from '../modal/Modal';
 import IngredientDetails from '../ingredientDetails/IngredientDetails';
 import { fetchIngridients } from '../../services/actions/actions';
 import { INGREDIENT_DETAILS, DELETE_INGREDIENT_DETAILS, TAB_BUN, TAB_SAUSE, TAB_MAIN } from '../../services/actions/actions';
+import { Spinner } from "../spinner/spinner";
 
 interface RootState {
     BurgerIngredients: any,
     burgerReducer: any,
     tabSwitchReducer: any,
-    burgerConstructorReducer: any
+    burgerConstructorReducer: any,
+    spinnerReducer: any
+}
+
+export interface IItem {
+    calories: number,
+    carbohydrates: number,
+    fat: number,
+    image: string,
+    image_large: string,
+    image_mobile: string,
+    name: string,
+    price: number,
+    proteins: number,
+    type: string,
+    __v: number,
+    _id: string
 }
 
 const BurgerIngredients = () => {
@@ -26,16 +43,17 @@ const BurgerIngredients = () => {
     const {currentTab} = useSelector((store: RootState) => store.tabSwitchReducer);
     const {BurgerConstructorBun} = useSelector((store: RootState) => store.burgerConstructorReducer);
     const {BurgerConstructorBody} = useSelector((store: RootState) => store.burgerConstructorReducer);
+    const {spinner} = useSelector((store: RootState) => store.spinnerReducer);
+
     const location = useLocation();
-    const history: any = useHistory();
-    const {params} = useRouteMatch();
+    const history = useHistory();
 
     const [isOpen, setOpen] = useState(false);
 
-    const bunRef = useRef<any>(null);
-    const sauseRef = useRef<any>(null);
-    const mainRef = useRef<any>(null);
-    const scrollRef = useRef<any>(null);
+    const bunRef = useRef<HTMLParagraphElement| null>(null);
+    const sauseRef = useRef<HTMLParagraphElement| null>(null);
+    const mainRef = useRef<HTMLParagraphElement| null>(null);
+    const scrollRef = useRef<HTMLDivElement| null>(null);
     
     useEffect(() => {
        dispatch(fetchIngridients())
@@ -43,15 +61,15 @@ const BurgerIngredients = () => {
     
     useEffect(() => {
         if(localStorage.getItem('modal')) {
-            const item = JSON.parse(localStorage.getItem('modal') as any)
-            handleOpen(item as any)
+            const item: IItem = JSON.parse(localStorage.getItem('modal') as string)
+            handleOpen(item)
         }
     }, [])
     
     const handleOpen = (item: Record<string, any>) => {
         setOpen(true)
         dispatch({type: INGREDIENT_DETAILS, IngredientDetails: item})
-        localStorage.setItem('modal', JSON.stringify(item as any));
+        localStorage.setItem('modal', JSON.stringify(item));
     }
 
     const handleClose = () => {
@@ -66,7 +84,7 @@ const BurgerIngredients = () => {
     }
 
     const handleScroll = () => {
-        const scrollTop = scrollRef.current.scrollTop;
+        const scrollTop: number = (scrollRef.current as HTMLDivElement).scrollTop;
 
         if(scrollTop ===  0) {
             dispatch({type: TAB_BUN, currentTab: 'BUN'});
@@ -79,9 +97,9 @@ const BurgerIngredients = () => {
         }
     };
 
-    const bunScroll = () => bunRef.current.scrollIntoView();
-    const sauseScroll = () => sauseRef.current.scrollIntoView();
-    const mainScroll = () => mainRef.current.scrollIntoView();
+    const bunScroll = () => (bunRef.current as HTMLParagraphElement).scrollIntoView();
+    const sauseScroll = () => (sauseRef.current as HTMLParagraphElement).scrollIntoView();
+    const mainScroll = () => (mainRef.current as HTMLParagraphElement).scrollIntoView();
 
     return (
         <section className={cn(styles.body, 'mb-10')}>
@@ -97,7 +115,8 @@ const BurgerIngredients = () => {
                     <p className={cn(styles.tab_text, 'text text_type_main-default', currentTab === 'MAIN' && 'tab_text-active')} onClick={mainScroll}>Начинки</p>
                 </Tab>
             </div>
-            <div className={styles.inner} ref={scrollRef} onScroll={handleScroll}>
+            {spinner ? <Spinner/> : 
+            (<div className={styles.inner} ref={scrollRef} onScroll={handleScroll}>
                 <p ref={bunRef} className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Булки</p>
                 <div className={cn(styles.block)}>
                     {BurgerIngredients.map((item:  Record<string, any>) => {
@@ -152,7 +171,8 @@ const BurgerIngredients = () => {
                             </Link>
                     })}
                 </div>
-            </div>
+            </div>)
+            }
             {isOpen && 
                 <Modal onClose={handleClose} text={'Детали ингредиента'}>
                     <IngredientDetails/>

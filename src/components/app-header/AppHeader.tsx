@@ -1,4 +1,4 @@
-import React from "react";
+import React, {FC, ReactNode} from "react";
 import cn from 'classnames';
 import { Link } from "react-router-dom";
 
@@ -21,7 +21,7 @@ const IconList = () => {
 }
 
  
-const AppHeader = () => {
+const AppHeader: FC = () => {
  return (
      <header className={cn(styles.body)}>
          <nav className={styles.nav}>

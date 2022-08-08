@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import styles from './Register.module.css';
 import cn from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
@@ -10,12 +10,12 @@ import { registry } from "../../services/actions/actionsUser";
 const Register: React.FC = () => {
     const dispatch = useDispatch();
     const inputRef = React.useRef(null);
-    const [valueName, setValueName] = React.useState('');
-    const [valueEmail, setValueEmail] = React.useState('');
-    const [valuePassword, setValuePassword] = React.useState('');
+    const [valueName, setValueName] = React.useState<string>('');
+    const [valueEmail, setValueEmail] = React.useState<string>('');
+    const [valuePassword, setValuePassword] = React.useState<string>('');
     const infoRegistry: Record<string, any> = {}
 
-    const registryUser = (e: any) => {
+    const registryUser = (e: FormEvent) => {
         e.preventDefault();
         infoRegistry.email = valueEmail;
         infoRegistry.password = valuePassword;
@@ -29,7 +29,7 @@ const Register: React.FC = () => {
     return (
         <main className={styles.root}>
         <h1 className={cn(styles.title, 'text text_type_main-large')}>Регистрация</h1>
-        <form onSubmit={(e) => registryUser(e) as any}>
+        <form onSubmit={(e) => registryUser(e)}>
             <div className={cn(styles.wrap, 'mb-6')}>
             <Input
                 type={'text'}
@@ -73,7 +73,8 @@ const Register: React.FC = () => {
         </form>
         
         <div className={cn(styles.wrap_text, 'mb-4')}>
-            <p className={cn(styles.text, 'text text_type_main-default')}>Уже зарегистрированы? </p> <p className={cn(styles.text_link, 'text text_type_main-default')}><Link to={'/login'}>Войти</Link></p>
+            <p className={cn(styles.text, 'text text_type_main-default')}>Уже зарегистрированы? </p> 
+            <p className={cn(styles.text_link, 'text text_type_main-default')}><Link to={'/login'}>Войти</Link></p>
         </div>
     </main>
     )

@@ -1,15 +1,15 @@
-import React, {useEffect} from "react";
+import React, {FormEvent, useEffect} from "react";
 import styles from "./Reset-password.module.css";
 import cn from "classnames";
 import { Button, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, useHistory, useLocation, useParams } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { resetPassword } from "../../services/Api";
 
 
 
 const ResetPassword: React.FC = () => {
-    const history: any = useHistory();
-    const location: any = useLocation();
+    const history = useHistory();
+    const location = useLocation();
     const [valueToken, setValueToken] = React.useState('');
     const [valuePassword, setValuePassword] = React.useState('');
     const infoRegistry: Record<string, any> = {};
@@ -20,18 +20,17 @@ const ResetPassword: React.FC = () => {
         }
     }, [])
 
-    const ResetPass = (e: any) => {
+    const ResetPass = (e: FormEvent) => {
         e.preventDefault();
         infoRegistry.password = valuePassword;
         infoRegistry.token = valueToken;
-        (resetPassword(infoRegistry) as any)
-        .then((res: any) => {
+        resetPassword(infoRegistry)
+        .then((res: {success: boolean, message: string}) => {
             if(res.success) {
                 history.push('/login')
             }
         })
     }
-
     return (
         <main className={styles.root}>
             <h1 className={cn(styles.title, 'text text_type_main-large')}>Восстановление пароля</h1>

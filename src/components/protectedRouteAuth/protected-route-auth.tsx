@@ -8,7 +8,14 @@ interface RootState {
     userReducuer: any
 }
 
-const ProtectedRouteAuth = (props: any) => {
+interface IProps {
+    children: React.ReactNode,
+    location?: Record<string, any> 
+    path: string,
+    exact: boolean
+}
+
+const ProtectedRouteAuth = (props: IProps) => {
     const dispatch = useDispatch();
     const {auth} = useSelector((store: RootState) => store.userReducuer);
     const {children, location, path, exact} = props;
