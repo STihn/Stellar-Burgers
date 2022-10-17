@@ -7,6 +7,7 @@ import { Button, Input } from "@ya.praktikum/react-developer-burger-ui-component
 import { fetchChangeUser, logOut } from "../../services/Api";
 import { DELETE_USER } from "../../services/actions/actionsUser";
 import { deleteCookie } from "../../utils/utils";
+import { OrderFeed } from "../../components/orderFeed/OrderFeed";
 
 interface RootState {
     userReducuer: any
@@ -20,6 +21,8 @@ const Profile: React.FC = ( ) => {
     const [valueName, setValueName] = React.useState<string>('');
     const [valueLogin, setValueLogin] = React.useState<string>('');
     const [valuePassword, setValuePassword] = React.useState<string>('');
+    const [isForm, setIsForm] = React.useState<boolean>(true);
+    const [isFeed, setIsFeed] = React.useState<boolean>(false);
     const infoRegistry: Record<string, any> = {}
 
     useEffect(() => {
@@ -48,21 +51,34 @@ const Profile: React.FC = ( ) => {
         fetchChangeUser(infoRegistry)
     }
 
+    const handleForm = () => {
+        setIsFeed(false)
+        setIsForm(true)
+    }
+
+    const handleFeed = () => {
+        setIsForm(false)
+        setIsFeed(true)
+    }
+
     return (
         <main className={styles.root}>
             <div className={cn(styles.wrapper,  'mr-15')}>
                 <div className={cn(styles.wrap, 'mb-20')}>
                     <NavLink 
-                        className={cn(styles.link,styles.active_link, 'text text_type_main-medium')} 
+                        className={cn(styles.link, 'text text_type_main-medium')} 
                         to={'/profile'}
                         activeClassName='styles.active_link'
+                        onClick={() => handleForm()}
                     >
                         Профиль
                     </NavLink>
                     <NavLink 
                         className={cn(styles.link, 'text text_type_main-medium')} 
+                        // to={'/profile/orders'}
                         to={'#'}
                         activeClassName='styles.active_link'
+                        onClick={() => handleFeed()}
                     >
                         История заказов
                     </NavLink>
@@ -75,9 +91,11 @@ const Profile: React.FC = ( ) => {
                         Выход
                     </NavLink>
                 </div>
-                <p className={cn('text text_type_main-small', styles.text)}>В этом разделе вы можете изменить свои персональные данные</p>
+                {isForm && <p className={cn('text text_type_main-small', styles.text)}>В этом разделе вы можете изменить свои персональные данные</p>}
+                {isFeed && <p className={cn('text text_type_main-small', styles.text)}>В этом разделе вы можете просмотреть свою историю заказов</p>}
             </div>
-            <form className={cn(styles.block)} onSubmit={(e)=> changeUser(e)}>
+            {isForm &&
+                <form className={cn(styles.block)} onSubmit={(e)=> changeUser(e)}>
                 <div className={cn(styles.wrap_input, 'mb-6')}>
                     <Input
                         type={'text'}
@@ -122,7 +140,12 @@ const Profile: React.FC = ( ) => {
                     <p className={cn(styles.cancel, 'text text_type_main-default')}>Отмена</p>
                     <button type="submit" className={cn(styles.submit, 'text text_type_main-default')}>Сохранить</button>
                 </div>
-            </form >
+            </form>}
+            {isFeed && 
+                <div className={styles.feedWrap}>
+                    <OrderFeed/>
+                </div>
+            }
         </main>
     )
 }

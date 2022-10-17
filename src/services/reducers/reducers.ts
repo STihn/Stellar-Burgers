@@ -30,7 +30,10 @@ export const initialState = {
     currentTab: 'BUN',
     totalPrice: 0,
     auth: {},
-    spinner: false
+    spinner: false,
+    WsStatus: 'OFFLINE',
+    WsError: '',
+    feeList: []
 }
 
 const tabSwitchReducer = (state = initialState, action: any) => {

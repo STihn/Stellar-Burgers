@@ -1,3 +1,5 @@
+import { rootReducer } from "../services/reducers/reducers";
+
 export interface IData {
     image?: string,
     type?: string, 
@@ -19,4 +21,22 @@ export interface IIngredients {
     price: number,
     type: string,
     _id: string
+}
+
+export type RootState = ReturnType<typeof rootReducer>
+
+export interface IWsActions {
+    WsConnect:  string,
+    WsDisconnect:  string,
+    WsConnecting:  string,
+    onOpen: string,
+    onClose:  string,
+    onError:  string,
+    onMessage: string 
+}
+
+export interface LiveTableStore {
+    status: string,
+    connectionError: string,
+    table: Record<string, any>
 }

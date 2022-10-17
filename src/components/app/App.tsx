@@ -16,6 +16,10 @@ import Profile from '../../pages/Profile/Profile';
 import ProtectedRoute from '../protectedRoute/protected-route';
 import ProtectedRouteAuth from '../protectedRouteAuth/protected-route-auth';
 import IngredientPage from '../ingredientPage/ingredientPage';
+import { FeedPages } from '../../pages/FeedPages/FeedPages';
+import { FeedPage } from '../feedPage/FeedPage';
+import { OrderFeed } from '../orderFeed/OrderFeed';
+import { DefineOrder } from '../../pages/DefineOrder/DefineOrder';
 
 
 interface IState extends ILocation {
@@ -59,6 +63,18 @@ const App: FC = () => {
             <ProtectedRoute path='/profile' exact>
                 <Profile/>
             </ProtectedRoute>
+            <Route path='/feed' exact>
+              <FeedPages/>
+            </Route>
+            <Route path='/feed/:id' exact>
+              <FeedPage/>
+            </Route>
+            <Route path='/profile/orders' exact>
+              <DefineOrder/>
+            </Route>
+            <Route path='/profile/orders/:id' exact>
+
+            </Route>
             <Route path='/' exact>
                 <MainPage/>
             </Route>

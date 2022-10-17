@@ -29,6 +29,10 @@
     color: #F2F2F3;
     cursor: pointer;
     text-align: center;
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
 }
 
 .button_nav {
