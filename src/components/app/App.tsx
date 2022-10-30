@@ -21,7 +21,6 @@ import { FeedPage } from '../feedPage/FeedPage';
 import { OrderFeed } from '../orderFeed/OrderFeed';
 import { DefineOrder } from '../../pages/DefineOrder/DefineOrder';
 
-
 interface IState extends ILocation {
 
   background: ILocation
@@ -73,7 +72,7 @@ const App: FC = () => {
               <DefineOrder/>
             </Route>
             <Route path='/profile/orders/:id' exact>
-
+              <OrderFeed/>
             </Route>
             <Route path='/' exact>
                 <MainPage/>

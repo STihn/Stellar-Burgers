@@ -3,14 +3,39 @@ import styles from './FeedPages.module.css';
 import cn from 'classnames';
 import { OrderFeed } from "../../components/orderFeed/OrderFeed";
 import { wsUrl } from "../../services/WebSocket";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {WSFeedActions} from '../../services/actions/actionsFeed'
+
+interface RootState {
+    FeedReducer: any;
+}
 
 export const FeedPages = () => {
     const dispatch = useDispatch();
+    const {feedList} = useSelector((store: RootState) => store.FeedReducer);
+    let col = false;
+    let count = 0;
     useEffect(() => {
-            dispatch({type: WSFeedActions.WsConnect, action: `${wsUrl}/orders/all`})
+        dispatch({type: WSFeedActions.WsConnect, action: `wss://norma.nomoreparties.space/orders/all`})
     }, [])
+
+    const tableDone = () => {
+        if(feedList.length !== 0) {
+            return feedList.orders.map((item: any) => {
+                if(item.status === 'done') {
+                    count++;
+                    if(count <= 10) {
+                        col = true;
+                        return (
+                            <p className={cn(styles.textTotals, styles.color, "text text_type_main-small")} key={item._id}>
+                                {item.number}
+                            </p>
+                        )
+                    }    
+                }
+            })
+        }
+    }
 
     return (
         <main className={styles.root}>
@@ -25,45 +50,28 @@ export const FeedPages = () => {
                     <div className={cn(styles.wrapTotals, 'mb-15')}>
                         <div className={styles.block}>
                             <p className={cn(styles.subtitle, "text text_type_main-large", 'mb-6')}>Готовы:</p>
-                            <p className={cn(styles.textTotals, styles.color, "text text_type_main-small")}>
-                                334545645
-                            </p>
-                            <p className={cn(styles.textTotals, styles.color, "text text_type_main-small")}>
-                                334545645
-                            </p>
-                            <p className={cn(styles.textTotals, styles.color, "text text_type_main-small")}>
-                                334545645
-                            </p>
-                            <p className={cn(styles.textTotals, styles.color, "text text_type_main-small")}>
-                                334545645
-                            </p>
-                            <p className={cn(styles.textTotals, styles.color, "text text_type_main-small")}>
-                                334545645
-                            </p>
-                            <p className={cn(styles.textTotals, styles.color, "text text_type_main-small")}>
-                                334545645
-                            </p>
+                            <div className={cn(styles.wrap)}>
+                                <div className={styles.column}>
+                                    {tableDone()}
+                                </div>
+                                {col &&
+                                    <div className={styles.column}>
+                                        {tableDone()}
+                                    </div>
+                                }
+                            </div>
                         </div>
                         <div className={styles.block}>
                             <p className={cn(styles.subtitle, "text text_type_main-large", 'mb-6')}>В работе:</p>
                             <p className={cn(styles.textTotals, "text text_type_main-small")}>
-                                334545645
-                            </p>
-                            <p className={cn(styles.textTotals, "text text_type_main-small")}>
-                                334545645
-                            </p>
-                            <p className={cn(styles.textTotals, "text text_type_main-small")}>
-                                334545645
-                            </p>
-                            <p className={cn(styles.textTotals, "text text_type_main-small")}>
-                                334545645
+                                
                             </p>
                         </div>
                     </div>
                     <p className={cn(styles.subtitle, "text text_type_main-large")}>Выполнено за все время:</p>
-                    <p className={cn(styles.totalPrice, "text text_type_digits-large", 'mb-15')}>28 752</p>
+                    <p className={cn(styles.totalPrice, "text text_type_digits-large", 'mb-15')}>{feedList.total}</p>
                     <p className={cn(styles.subtitle, "text text_type_main-large")}>Выполнено за сегодня:</p>
-                    <p className={cn(styles.totalPrice, "text text_type_digits-large", 'mb-15')}>288</p>
+                    <p className={cn(styles.totalPrice, "text text_type_digits-large", 'mb-15')}>{feedList.totalToday}</p>
                 </div>
             </section>
         </main>

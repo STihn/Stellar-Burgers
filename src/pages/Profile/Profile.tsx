@@ -6,8 +6,9 @@ import { Link, NavLink, useHistory } from "react-router-dom";
 import { Button, Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import { fetchChangeUser, logOut } from "../../services/Api";
 import { DELETE_USER } from "../../services/actions/actionsUser";
-import { deleteCookie } from "../../utils/utils";
+import { deleteCookie, getCookie } from "../../utils/utils";
 import { OrderFeed } from "../../components/orderFeed/OrderFeed";
+import { WSFeedActions } from "../../services/actions/actionsFeed";
 
 interface RootState {
     userReducuer: any
@@ -23,8 +24,9 @@ const Profile: React.FC = ( ) => {
     const [valuePassword, setValuePassword] = React.useState<string>('');
     const [isForm, setIsForm] = React.useState<boolean>(true);
     const [isFeed, setIsFeed] = React.useState<boolean>(false);
-    const infoRegistry: Record<string, any> = {}
-
+    const infoRegistry: Record<string, any> = {};
+    const token = getCookie('accessToken')?.slice(7, getCookie('accessToken')?.length)
+    
     useEffect(() => {
 
        setValueName(auth.user.name);
@@ -59,6 +61,7 @@ const Profile: React.FC = ( ) => {
     const handleFeed = () => {
         setIsForm(false)
         setIsFeed(true)
+        dispatch({type: WSFeedActions.WsConnect, action: `wss://norma.nomoreparties.space/orders?token=${token}`})
     }
 
     return (
@@ -143,7 +146,7 @@ const Profile: React.FC = ( ) => {
             </form>}
             {isFeed && 
                 <div className={styles.feedWrap}>
-                    <OrderFeed/>
+                    <OrderFeed profile/>
                 </div>
             }
         </main>

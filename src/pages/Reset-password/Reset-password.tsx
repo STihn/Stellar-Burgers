@@ -57,6 +57,7 @@ const ResetPassword: React.FC = () => {
                     <Button 
                         type="primary" 
                         size="small"
+                        htmlType='submit'
                     >
                         Сохранить
                     </Button>

@@ -45,3 +45,14 @@
 .tapeWrap {
     width: 596px;
 }
+
+.column {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 135px;
+}
+
+.wrap {
+    display: flex;
+}

@@ -6,13 +6,10 @@ import { useRouteMatch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchIngridients, INGREDIENT_DETAILS } from "../../services/actions/actions";
 import { IItem } from "../burgerIngredients/BurgerIngredients";
+import { IUseRouteMatch } from "../../utils/types";
 
 interface RootState {
      burgerReducer: any
-}
-
-interface IUseRouteMatch {
-    id: string
 }
 
 const IngredientPage = () => {

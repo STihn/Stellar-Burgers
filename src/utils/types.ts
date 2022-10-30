@@ -40,3 +40,7 @@ export interface LiveTableStore {
     connectionError: string,
     table: Record<string, any>
 }
+
+export interface IUseRouteMatch {
+    id: string
+}

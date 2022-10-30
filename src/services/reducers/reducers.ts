@@ -20,6 +20,7 @@ import {
     CLEAR_ORDER_DETAILS,
     CLEAR_TOTAL_PRICE
     } from '../actions/actions';
+import { FeedReducer } from "./reducersFeed";
 
 export const initialState = {
     BurgerIngredients: [],
@@ -33,7 +34,7 @@ export const initialState = {
     spinner: false,
     WsStatus: 'OFFLINE',
     WsError: '',
-    feeList: []
+    feedList: []
 }
 
 const tabSwitchReducer = (state = initialState, action: any) => {
@@ -195,5 +196,6 @@ export const rootReducer = combineReducers({
     totalPriceReducer,
     orderDetailsReducer,
     userReducuer,
-    spinnerReducer
+    spinnerReducer,
+    FeedReducer
 })

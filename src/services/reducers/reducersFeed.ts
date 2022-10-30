@@ -1,41 +1,39 @@
 import { initialState } from './reducers';
-import {IWsActions} from '../../utils/types';
-import { WSFeedActions } from '../actions/actionsFeed'
+import { WS_CONNECT, WS_OPEN, WS_CLOSE, WS_ERROR, WS_MESSAGE  } from '../actions/actionsFeed';
 
 // WsStatus: 'OFFLINE',
 // WsError: '',
 // feedList: []
 
 export const FeedReducer = (state = initialState, action: any) => {
-    console.log(action, 'action')
-    switch (action) {
-        case WSFeedActions.WsConnect:
+    switch (action.type) {
+        case WS_CONNECT:
             return {
                 ...state,
                 WsStatus: 'CONNECTING',
                 WsError: ''
             }
-        case WSFeedActions.onClose:
+        case WS_CLOSE:
             return {
                 ...state,
                 WsStatus: 'OFFLINE',
                 WsError: ''
             }
-        case WSFeedActions.onError: 
+        case WS_ERROR: 
             return {
                 ...state,
                 WsStatus: 'OFFLINE',
                 wsError: action.payload
             }
-        case WSFeedActions.onMessage:
+        case WS_MESSAGE:
             return {
                 ...state,
                 WsStatus: 'ONLINE',
                 WsError: '',
-                feedList: action
+                feedList: action.payload
 
             }
-        case WSFeedActions.onOpen:
+        case WS_OPEN:
             return {
                 ...state,
                 WsStatus: 'ONLINE',

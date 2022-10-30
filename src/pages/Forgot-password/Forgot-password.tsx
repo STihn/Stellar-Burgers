@@ -42,9 +42,10 @@ const ForgotPassword: React.FC = () => {
                     />
                 </div>
                 <div className={cn(styles.button_wrap, 'mb-20', 'text text_type_main-small')}>
-                    <Button 
+                    <Button
                         type="primary" 
                         size="small"
+                        htmlType='submit'
                     >
                         Восстановить
                     </Button>
