@@ -41,7 +41,6 @@
 
 .icon {
     display: flex;
-    flex-wrap: wrap;
     width: 304px;
 }
 
@@ -52,7 +51,21 @@
     background: #131316;
     border-radius: 50px;
     object-fit: contain;
+}
 
+.image {
+    width: 64px;
+    height: 64px;
+    background: #131316;
+    border-radius: 50px;
+    object-fit: contain;
+}
+
+.imageWrap {
+        border: 2px solid #4C4CFF;
+        width: 64px;
+        height: 64px;
+        border-radius: 50px;
 }
 
 .img:nth-child(odd) {
@@ -79,5 +92,13 @@
 }
 
 .total {
+    color: #F2F2F3;
+}
+
+.count {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -50px;
     color: #F2F2F3;
 }

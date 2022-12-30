@@ -1,3 +1,5 @@
+import { isEmpty } from "lodash";
+import { IData, IFetchIngridient, IQuantityOrder } from "./types";
 
 export function setCookie(name: string, value: any, props: any) {
     props = props || {};
@@ -35,12 +37,12 @@ export function deleteCookie(name: string) {
 
 const arr = ['дня', 'дней']
 
-export const rangeDate = (dateNow: any, date: any) => {
+export const rangeDate = (dateNow: number, date: number) => {
   if(dateNow === date) {
     return `Сегодня`;
   }else if(1 === (dateNow - date)) {
     return `Вчера`;
-  }else if(2 >= (dateNow - date)) {
+  }else {
     return `${(dateNow - date)} дня назад`;
   }
 }
@@ -55,21 +57,48 @@ export const changeDate = (date: string) => {
   return result;
 }
 
-export const showInfoOrder = (wsPicture: any, BurgerIngredients: any, text: string) => {
-  const arr: any = [];
+export const showInfoOrder = (wsPicture: string[], BurgerIngredients: IFetchIngridient[], text: string) => {
+  const arr: (number | IFetchIngridient | {image: string, len: number})[] = [];
 
-  BurgerIngredients.forEach((element: any) => {
-      wsPicture.find((item: any) => {
+  BurgerIngredients.forEach((element) => {
+      wsPicture.find((item) => {
           if(item === element._id) {
               if(text === 'icon') {
-                  arr.push(element.image)
+                  arr.push({image: element.image, len: wsPicture.length} as {image: string, len: number})
               }else if(text === 'price') {
-                  arr.push(element.price)
+                  arr.push(element.price  as number)
               }else if(text === 'modal') {
-                  arr.push(element)
+                arr.push(element)
               }
           }
       })
   });
+
   return arr
+}
+
+export const quantityOrder = (count: IFetchIngridient[]): IQuantityOrder[] => {
+  const countArr: IQuantityOrder[] = [...count];
+  const len = count.length;
+  // const amount: IQuantityOrder[] = [];
+
+  for(let i = 0; i<len; i++) {
+    let quantity = 0;
+    // console.log(Object.assign({}, countArr[i], {quantity}))
+    // countArr[i] = Object.assign({}, countArr[i], {quantity})
+    countArr[i].quantity = quantity
+    countArr.forEach((element: IQuantityOrder, index) => {
+      if(countArr[i]._id === element._id) {
+        (countArr[i] as any).quantity++
+      }
+    })
+  }
+
+  const amount = countArr.filter((item, index) => {
+    console.log(countArr.indexOf(item),item, index)
+    return countArr.indexOf(item) === index
+  });
+
+
+  return amount
 }

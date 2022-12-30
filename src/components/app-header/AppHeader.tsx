@@ -5,8 +5,8 @@ import { Link, NavLink } from "react-router-dom";
 import styles from './app-header.module.css';
 
 import {Logo, BurgerIcon, ListIcon} from '@ya.praktikum/react-developer-burger-ui-components';
-import { WSFeedActions } from "../../services/actions/actionsFeed";
-import { useDispatch } from "react-redux";
+import { wsFeedActions } from "../../services/actions/actionsFeed";
+import { useDispatch } from "../../utils/types";
 
  
 const AppHeader: FC = () => {
@@ -15,7 +15,7 @@ const AppHeader: FC = () => {
     }
 
     const handleProfile = () => {
-        dispatch({ type: WSFeedActions.onClose});
+        dispatch({ type: wsFeedActions.onClose});
     }
 
  return (
@@ -25,6 +25,7 @@ const AppHeader: FC = () => {
                 <NavLink 
                     to='/'
                     className={cn(styles.button,'p-5', 'mt-4', 'mb-4', 'mr-2')}
+                    activeClassName={styles.button_active}
                 >
                     <BurgerIcon type="primary" />
                     <span className={cn(styles.button, 'text text_type_main-default', 'ml-2')}>Конструктор</span>
@@ -40,7 +41,7 @@ const AppHeader: FC = () => {
              <div className={styles.wrapper}>
                 <Link to={'/'}><Logo /></Link>
                 <Link 
-                    className={cn(styles.button, styles.button_nav, styles.login, 'text text_type_main-default','p-5', 'mt-4', 'mb-4')} 
+                    className={cn(styles.button, styles.login, 'text text_type_main-default','p-5', 'mt-4', 'mb-4')} 
                     to={'/profile'}
                     onClick={handleProfile}
                 >

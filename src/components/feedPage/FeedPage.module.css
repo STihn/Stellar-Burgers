@@ -39,6 +39,7 @@
     align-items: center;
     justify-content: space-between;
     width: 608px;
+    margin-bottom: 16px;
 }
 
 .wrap {
@@ -63,7 +64,8 @@
 }
 
 .price {
-    width: 100px;
+    width: 120px;
+    text-align: end;
 }
 
 .date {
@@ -88,4 +90,18 @@
 
 .wrapper {
     display: flex;
+}
+
+.img {
+    border: 2px solid #4C4CFF;
+    width: 64px;
+    height: 64px;
+    background: #131316;
+    border-radius: 50px;
+    object-fit: contain;
+}
+
+.number {
+    display: flex;
+    justify-content: center;
 }

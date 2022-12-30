@@ -1,49 +1,25 @@
 import React, { FormEvent, useEffect } from "react";
 import styles from './Profile.module.css';
 import cn from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, NavLink, useHistory } from "react-router-dom";
-import { Button, Input } from "@ya.praktikum/react-developer-burger-ui-components";
-import { fetchChangeUser, logOut } from "../../services/Api";
-import { DELETE_USER } from "../../services/actions/actionsUser";
-import { deleteCookie, getCookie } from "../../utils/utils";
-import { OrderFeed } from "../../components/orderFeed/OrderFeed";
-import { WSFeedActions } from "../../services/actions/actionsFeed";
-
-interface RootState {
-    userReducuer: any
-}
+import { useSelector } from "../../utils/types";
+import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
+import { fetchChangeUser } from "../../services/Api";
+import { ProfileNavigation } from "../../components/profileNavigation/ProfileNavigation";
 
 
 const Profile: React.FC = ( ) => {
-    const history = useHistory();
-    const dispatch = useDispatch();
-    const {auth} = useSelector((store: RootState) => store.userReducuer)
+    const {auth} = useSelector((store) => store.userReducuer)
     const [valueName, setValueName] = React.useState<string>('');
     const [valueLogin, setValueLogin] = React.useState<string>('');
     const [valuePassword, setValuePassword] = React.useState<string>('');
-    const [isForm, setIsForm] = React.useState<boolean>(true);
-    const [isFeed, setIsFeed] = React.useState<boolean>(false);
     const infoRegistry: Record<string, any> = {};
-    const token = getCookie('accessToken')?.slice(7, getCookie('accessToken')?.length)
-    
+
     useEffect(() => {
-
-       setValueName(auth.user.name);
-       setValueLogin(auth.user.email) 
-
-     }, []);
-
-    const logOutUser = () => {
-        (logOut())
-        .then((res: {success: boolean, message: string}) => {
-            if(res.success){
-                dispatch({type: DELETE_USER})
-                deleteCookie('accessToken')
-                history.push('/login')
-            }
+        if(auth !== null) {
+            setValueName(auth.user.name);
+            setValueLogin(auth.user.email) 
         }
-    )}
+     }, [auth]);
 
     const changeUser = (e: FormEvent) => {
         e.preventDefault()
@@ -53,51 +29,14 @@ const Profile: React.FC = ( ) => {
         fetchChangeUser(infoRegistry)
     }
 
-    const handleForm = () => {
-        setIsFeed(false)
-        setIsForm(true)
-    }
-
-    const handleFeed = () => {
-        setIsForm(false)
-        setIsFeed(true)
-        dispatch({type: WSFeedActions.WsConnect, action: `wss://norma.nomoreparties.space/orders?token=${token}`})
-    }
-
     return (
         <main className={styles.root}>
             <div className={cn(styles.wrapper,  'mr-15')}>
                 <div className={cn(styles.wrap, 'mb-20')}>
-                    <NavLink 
-                        className={cn(styles.link, 'text text_type_main-medium')} 
-                        to={'/profile'}
-                        activeClassName='styles.active_link'
-                        onClick={() => handleForm()}
-                    >
-                        Профиль
-                    </NavLink>
-                    <NavLink 
-                        className={cn(styles.link, 'text text_type_main-medium')} 
-                        // to={'/profile/orders'}
-                        to={'#'}
-                        activeClassName='styles.active_link'
-                        onClick={() => handleFeed()}
-                    >
-                        История заказов
-                    </NavLink>
-                    <NavLink 
-                        className={cn(styles.link, 'text text_type_main-medium')}
-                        activeClassName='styles.active_link'
-                        to={'/login'} 
-                        onClick={()=>logOutUser()}
-                    >
-                        Выход
-                    </NavLink>
+                {<ProfileNavigation/>}
                 </div>
-                {isForm && <p className={cn('text text_type_main-small', styles.text)}>В этом разделе вы можете изменить свои персональные данные</p>}
-                {isFeed && <p className={cn('text text_type_main-small', styles.text)}>В этом разделе вы можете просмотреть свою историю заказов</p>}
+                <p className={cn('text text_type_main-small', styles.text)}>В этом разделе вы можете изменить свои персональные данные</p>
             </div>
-            {isForm &&
                 <form className={cn(styles.block)} onSubmit={(e)=> changeUser(e)}>
                 <div className={cn(styles.wrap_input, 'mb-6')}>
                     <Input
@@ -143,12 +82,7 @@ const Profile: React.FC = ( ) => {
                     <p className={cn(styles.cancel, 'text text_type_main-default')}>Отмена</p>
                     <button type="submit" className={cn(styles.submit, 'text text_type_main-default')}>Сохранить</button>
                 </div>
-            </form>}
-            {isFeed && 
-                <div className={styles.feedWrap}>
-                    <OrderFeed profile/>
-                </div>
-            }
+            </form>
         </main>
     )
 }

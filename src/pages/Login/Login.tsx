@@ -2,16 +2,13 @@
 import React, { FormEvent } from "react";
 import styles from './Login.module.css';
 import cn from "classnames";
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from "../../utils/types";
 
 import { Button, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, Redirect, useLocation } from "react-router-dom";
 import { login } from "../../services/actions/actionsUser";
 import { ILocation } from "../../components/app/App";
 
-interface RootState {
-    userReducuer: any
-}
 
 interface ILogin extends ILocation {
     from: ILocation
@@ -19,10 +16,13 @@ interface ILogin extends ILocation {
 
 const Login: React.FC = () => {
     const dispatch = useDispatch();
-    const {auth} = useSelector((store: RootState) => store.userReducuer)
+    const {auth} = useSelector((store) => store.userReducuer)
     const [valueEmail, setValueEmail] = React.useState<string>('');
     const [valuePassword, setValuePassword] = React.useState<string>('');
-    const infoRegistry: Record<string, any> = {}
+    const infoRegistry: {email: string, password: string} = {
+        email: "",
+        password: ""
+    }
     const location = useLocation<ILogin>();
     const loginUser = (e: FormEvent) => {
         e.preventDefault();
@@ -31,7 +31,7 @@ const Login: React.FC = () => {
         dispatch(login(infoRegistry))
     }
 
-    if (auth.success) {
+    if (auth !== null && auth.success) {
         return (
           <Redirect
             to={{

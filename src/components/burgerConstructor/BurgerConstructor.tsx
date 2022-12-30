@@ -1,7 +1,7 @@
 import React, {useCallback, useState } from "react";
 import cn from 'classnames';
-import { useSelector, useDispatch } from 'react-redux';
-import { useDrop, useDrag } from "react-dnd";
+import { IData, useDispatch, useSelector } from "../../utils/types";
+import { useDrop } from "react-dnd";
 import { v4 as uuidv4 } from 'uuid';
 import { debounce } from "lodash";
 
@@ -28,18 +28,13 @@ import { getCookie } from "../../utils/utils";
 import { useHistory } from "react-router-dom";
 import {IIngredients} from '../../utils/types'
 
-interface RootState {
-    burgerConstructorReducer: any,
-    totalPriceReducer: any
-}
-
 
 const BurgerConstructor: React.FC = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const {BurgerConstructorBun} = useSelector((store: RootState) => store.burgerConstructorReducer);
-    const {BurgerConstructorBody} = useSelector((store: RootState) => store.burgerConstructorReducer);
-    const {totalPrice} = useSelector((store: RootState) => store.totalPriceReducer);
+    const {BurgerConstructorBun} = useSelector((store) => store.burgerConstructorReducer);
+    const {BurgerConstructorBody} = useSelector((store) => store.burgerConstructorReducer);
+    const {totalPrice} = useSelector((store) => store.totalPriceReducer);
     const token = getCookie('accessToken');
 
     const [isOpen, setOpen] = React.useState<boolean>(false);
@@ -69,7 +64,7 @@ const BurgerConstructor: React.FC = () => {
         BurgerConstructorBody.map((item: IIngredients, index: number) => {
             if(item.id === id) {
                 dispatch({type: DELETE_CONSTRUCTOR_BODY, index})
-                dispatch({type: DECREMENT_BODY, item})
+                dispatch({type: DECREMENT_BODY, price: item.price})
             }
         })
     }
@@ -83,12 +78,12 @@ const BurgerConstructor: React.FC = () => {
                 data.count++;
                 dispatch({type: UPDATE_CONSTRUCTOR_BUN, data});
                 if(BurgerConstructorBun.length === 0) {
-                    dispatch({type: INCREMENT_BUN, data})
+                    dispatch({type: INCREMENT_BUN, payload: data.price})
                 }else {
                     BurgerConstructorBun.map((element: IIngredients) => {
                         if(element._id !== data._id) {
-                            dispatch({type: DECREMENT_BUN, BurgerConstructorBun});
-                            dispatch({type: INCREMENT_BUN, data});
+                            dispatch({type: DECREMENT_BUN, payload: element.price});
+                            dispatch({type: INCREMENT_BUN, payload: data.price});
                     }
                 })
                 }
@@ -104,7 +99,7 @@ const BurgerConstructor: React.FC = () => {
 
     const moveCard = (dragIdex: number, hoverIndex: number) => {
         const dragCard = BurgerConstructorBody[dragIdex];
-        const newCards = BurgerConstructorBody;
+        const newCards = [...BurgerConstructorBody];
         newCards.splice(dragIdex, 1);
         newCards.splice(hoverIndex, 0, dragCard);
         dispatch({type: DND_UPDATE_CONSTRUCTOR_BODY, newCards})

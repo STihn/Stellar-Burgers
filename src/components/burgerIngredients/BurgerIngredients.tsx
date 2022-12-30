@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from "react";
-import { useSelector, useDispatch } from 'react-redux';
+import { IData, useDispatch, useSelector } from "../../utils/types";
 import { Link, useHistory, useLocation } from "react-router-dom";
 
 import cn from 'classnames';
@@ -14,36 +14,14 @@ import { fetchIngridients } from '../../services/actions/actions';
 import { INGREDIENT_DETAILS, DELETE_INGREDIENT_DETAILS, TAB_BUN, TAB_SAUSE, TAB_MAIN } from '../../services/actions/actions';
 import { Spinner } from "../spinner/spinner";
 
-interface RootState {
-    BurgerIngredients: any,
-    burgerReducer: any,
-    tabSwitchReducer: any,
-    burgerConstructorReducer: any,
-    spinnerReducer: any
-}
-
-export interface IItem {
-    calories: number,
-    carbohydrates: number,
-    fat: number,
-    image: string,
-    image_large: string,
-    image_mobile: string,
-    name: string,
-    price: number,
-    proteins: number,
-    type: string,
-    __v: number,
-    _id: string
-}
 
 const BurgerIngredients = () => {
     const dispatch = useDispatch();
-    const {BurgerIngredients} = useSelector((store: RootState) => store.burgerReducer);
-    const {currentTab} = useSelector((store: RootState) => store.tabSwitchReducer);
-    const {BurgerConstructorBun} = useSelector((store: RootState) => store.burgerConstructorReducer);
-    const {BurgerConstructorBody} = useSelector((store: RootState) => store.burgerConstructorReducer);
-    const {spinner} = useSelector((store: RootState) => store.spinnerReducer);
+    const {BurgerIngredients} = useSelector((store) => store.burgerReducer);
+    const {currentTab} = useSelector((store) => store.tabSwitchReducer);
+    const {BurgerConstructorBun} = useSelector((store) => store.burgerConstructorReducer);
+    const {BurgerConstructorBody} = useSelector((store) => store.burgerConstructorReducer);
+    const {spinner} = useSelector((store) => store.spinnerReducer);
 
     const location = useLocation();
     const history = useHistory();
@@ -55,18 +33,18 @@ const BurgerIngredients = () => {
     const mainRef = useRef<HTMLParagraphElement| null>(null);
     const scrollRef = useRef<HTMLDivElement| null>(null);
     
-    useEffect(() => {
-       dispatch(fetchIngridients())
-    }, []);
+    // useEffect(() => {
+    //    dispatch(fetchIngridients())
+    // }, []);
     
     useEffect(() => {
         if(localStorage.getItem('modal')) {
-            const item: IItem = JSON.parse(localStorage.getItem('modal') as string)
+            const item = JSON.parse(localStorage.getItem('modal') as string)
             handleOpen(item)
         }
     }, [])
     
-    const handleOpen = (item: Record<string, any>) => {
+    const handleOpen = (item: IData) => {
         setOpen(true)
         dispatch({type: INGREDIENT_DETAILS, IngredientDetails: item})
         localStorage.setItem('modal', JSON.stringify(item));
@@ -80,7 +58,7 @@ const BurgerIngredients = () => {
     }
 
     const setCurrent = (value: string) => {
-        dispatch({type: `TAB_${value}`, currentTab: value});
+        dispatch({type: `TAB_${value}` , currentTab: value});
     }
 
     const handleScroll = () => {
@@ -119,7 +97,7 @@ const BurgerIngredients = () => {
             (<div className={styles.inner} ref={scrollRef} onScroll={handleScroll}>
                 <p ref={bunRef} className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Булки</p>
                 <div className={cn(styles.block)}>
-                    {BurgerIngredients.map((item:  Record<string, any>) => {
+                    {BurgerIngredients.map((item: IData) => {
                         return item.type === 'bun' && 
                             <Link
                                 key={item._id}
@@ -129,7 +107,7 @@ const BurgerIngredients = () => {
                                 <Ingredient 
                                     data={item} 
                                     key={item._id}
-                                    onClick={()=>handleOpen(item)} 
+                                    onClick={() => handleOpen(item)} 
                                     counter={BurgerConstructorBun}
                                 />
                             </Link>
@@ -137,7 +115,7 @@ const BurgerIngredients = () => {
                 </div>
                 <p ref={sauseRef} className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Соусы</p>
                 <div className={cn(styles.block)}>
-                    {BurgerIngredients.map((item:  Record<string, any>) => {
+                    {BurgerIngredients.map((item: IData) => {
                         return item.type === 'sauce' &&  
                             <Link
                                 key={item._id}
@@ -147,7 +125,7 @@ const BurgerIngredients = () => {
                                 <Ingredient
                                     data={item} 
                                     key={item._id} 
-                                    onClick={()=>handleOpen(item)} 
+                                    onClick={() => handleOpen(item)} 
                                     counter={BurgerConstructorBody}
                                 />
                             </Link>
@@ -155,7 +133,7 @@ const BurgerIngredients = () => {
                 </div>
                 <p ref={mainRef} className={cn(styles.subtitle, 'text text_type_main-small', 'mb-6')}>Начинки</p>
                 <div className={cn(styles.block)}>
-                    {BurgerIngredients.map((item:  Record<string, any>) => {
+                    {BurgerIngredients.map((item: IData) => {
                         return item.type === 'main' &&  
                             <Link
                                 key={item._id}
@@ -165,7 +143,7 @@ const BurgerIngredients = () => {
                                 <Ingredient 
                                     data={item} 
                                     key={item._id}
-                                    onClick={()=>handleOpen(item)} 
+                                    onClick={() => handleOpen(item)} 
                                     counter={BurgerConstructorBody}
                                 />
                             </Link>

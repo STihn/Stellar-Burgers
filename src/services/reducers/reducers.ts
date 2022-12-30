@@ -18,43 +18,55 @@ import {
     DND_UPDATE_CONSTRUCTOR_BODY,
     CLEAR_CONSTRUCTOR,
     CLEAR_ORDER_DETAILS,
-    CLEAR_TOTAL_PRICE
+    CLEAR_TOTAL_PRICE,
+    SPINNER
     } from '../actions/actions';
 import { FeedReducer } from "./reducersFeed";
+import { 
+    IConstructorItems,
+    IIngredients, 
+    IInitialState, 
+    ISpinner, 
+    TBurgerConstructorActions, 
+    TBurgersActions, 
+    TOrderDetailsActions, 
+    TTabSwitchActions, 
+    TTotalPriceActions 
+    } from "../../utils/types";
 
-export const initialState = {
+export const initialState: IInitialState = {
     BurgerIngredients: [],
-    BurgerConstructorBun: [] as any,
+    BurgerConstructorBun: [],
     BurgerConstructorBody: [],
     IngredientDetails: [],
-    OrderDetails: [] as Array<string>,
+    OrderDetails: [],
     currentTab: 'BUN',
     totalPrice: 0,
-    auth: {},
+    auth: null,
     spinner: false,
-    WsStatus: 'OFFLINE',
-    WsError: '',
-    feedList: []
+    wsStatus: 'OFFLINE',
+    wsError: '',
+    feedList: null
 }
 
-const tabSwitchReducer = (state = initialState, action: any) => {
+export const tabSwitchReducer = (state: IInitialState = initialState, action: TTabSwitchActions): IInitialState => {
     switch (action.type) {
         case TAB_BUN: {
             return {
                 ...state,
-                currentTab: 'BUN'
+                currentTab: action.currentTab
             }
         }
         case TAB_SAUSE: {
             return {
                 ...state,
-                currentTab: 'SAUSE'
+                currentTab: action.currentTab
             }
         }
         case TAB_MAIN: {
             return {
                 ...state,
-                currentTab: 'MAIN'
+                currentTab: action.currentTab
             }
         }
         default: {
@@ -64,7 +76,7 @@ const tabSwitchReducer = (state = initialState, action: any) => {
 }
 
 
-const burgerReducer = (state = initialState, action: any) => {
+export const burgerReducer = (state: IInitialState = initialState, action: TBurgersActions): IInitialState => {
     switch (action.type) {
         case FETCH_INGRIDIENTS: {
             return {
@@ -81,7 +93,7 @@ const burgerReducer = (state = initialState, action: any) => {
         case DELETE_INGREDIENT_DETAILS: {
             return {
                 ...state,
-                IngredientDetails: []
+                IngredientDetails: action.IngredientDetails
             }
         }
       default: {
@@ -90,7 +102,7 @@ const burgerReducer = (state = initialState, action: any) => {
     }
 }
 
-const handlerBody = (arr: any, idx: number) => {
+export const deleteBody = (arr: Array<IIngredients>, idx: number) => {
     if(arr.length === 1 ) {
        return arr.slice(0, 0)
     }
@@ -100,15 +112,14 @@ const handlerBody = (arr: any, idx: number) => {
     else {
        return [...arr.slice(0, idx), ...arr.slice(idx + 1)]
     }
-
 }
 
-const burgerConstructorReducer = (state = initialState, action: any) => {
+export const burgerConstructorReducer = (state: IInitialState = initialState, action: TBurgerConstructorActions): IInitialState => {
     switch (action.type) {
         case UPDATE_CONSTRUCTOR_BUN: {
             return {
                 ...state,
-                BurgerConstructorBun: [state.BurgerConstructorBun].map((element: any) => element.type !== action.type ? action.data : state.BurgerConstructorBun),
+                BurgerConstructorBun: [action.data]
             }
         }
         case UPDATE_CONSTRUCTOR_BODY: {
@@ -120,7 +131,7 @@ const burgerConstructorReducer = (state = initialState, action: any) => {
         case DELETE_CONSTRUCTOR_BODY: {
             return {
                 ...state,
-                BurgerConstructorBody: handlerBody(state.BurgerConstructorBody, action.index)
+                BurgerConstructorBody: deleteBody(state.BurgerConstructorBody, action.index)
             }
         }
         case DND_UPDATE_CONSTRUCTOR_BODY:  {
@@ -142,16 +153,28 @@ const burgerConstructorReducer = (state = initialState, action: any) => {
     }
 }
 
-const totalPriceReducer = (state = initialState, action: any) => {
+const totalPriceReducer = (state = initialState, action: TTotalPriceActions): IInitialState => {
     switch (action.type) {
       case INCREMENT_BUN:
-        return { totalPrice: state.totalPrice + (action.data?.price*2)};
+        return { 
+            ...state,
+            totalPrice: state.totalPrice + (action.payload*2)
+        };
       case INCREMENT_BODY:
-        return { totalPrice: state.totalPrice + action.price };
+        return { 
+            ...state,
+            totalPrice: state.totalPrice + action.price 
+        };
       case DECREMENT_BUN:
-        return { totalPrice: state.totalPrice - action.BurgerConstructorBun.map((item: any) => item.price*2)};
+        return {
+            ...state,
+            totalPrice: state.totalPrice - (action.payload*2)
+        };
       case DECREMENT_BODY:
-        return { totalPrice: state.totalPrice - action.item.price};
+        return {
+            ...state,
+            totalPrice: state.totalPrice - action.price
+        };
       case CLEAR_TOTAL_PRICE: {
         return {
             ...state,
@@ -164,10 +187,11 @@ const totalPriceReducer = (state = initialState, action: any) => {
     }
 }
 
-const orderDetailsReducer = (state = initialState, action: any) => {
+export const orderDetailsReducer = (state: IInitialState = initialState, action: TOrderDetailsActions): IInitialState => {
     switch(action.type) {
         case ORDER_DETAILS: {
             return {
+                ...state,
                 OrderDetails: action.OrderDetails,
             }
         }
@@ -183,19 +207,27 @@ const orderDetailsReducer = (state = initialState, action: any) => {
     }
 }
 
-const spinnerReducer = (state = initialState, action: any) => {
-        return {
-            spinner: action.action
+export const spinnerReducer = (state: IInitialState = initialState, action: ISpinner): IInitialState => {
+    switch(action.type) {
+        case SPINNER: {
+            return {
+                ...state,
+                spinner: action.payload
+            }
         }
+        default: {
+            return state
+        }
+    }
 }
 
 export const rootReducer = combineReducers({
-    burgerReducer,
-    tabSwitchReducer,
-    burgerConstructorReducer,
-    totalPriceReducer,
-    orderDetailsReducer,
-    userReducuer,
-    spinnerReducer,
-    FeedReducer
-})
+    tabSwitchReducer: tabSwitchReducer,
+    burgerReducer: burgerReducer,
+    burgerConstructorReducer: burgerConstructorReducer,
+    totalPriceReducer: totalPriceReducer,
+    orderDetailsReducer: orderDetailsReducer,
+    userReducuer: userReducuer,
+    spinnerReducer: spinnerReducer,
+    FeedReducer: FeedReducer,
+});

@@ -6,9 +6,9 @@ export const socketMiddleware = (wsActions: IWsActions) : Middleware<{}, RootSta
   let socket: WebSocket | null = null
   return ({dispatch}) => (next) => (action) => {
 
-      const { WsConnect, WsConnecting, onOpen, onClose, onError, onMessage, WsDisconnect } = wsActions;
+      const { wsConnect, wsConnecting, onOpen, onClose, onError, onMessage, wsDisconnect } = wsActions;
 
-      if (action.type === WsConnect) {
+      if (action.type === wsConnect) {
         socket = new WebSocket(action.action);
       }
 
@@ -17,8 +17,8 @@ export const socketMiddleware = (wsActions: IWsActions) : Middleware<{}, RootSta
           dispatch({ type: onOpen });
         };
 
-        if(action.type === WsDisconnect) {
-          socket.close();
+        if(action.type === wsDisconnect) {
+          dispatch({type: onClose})
         }
 
         socket.onerror = event => {

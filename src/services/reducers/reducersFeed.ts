@@ -1,43 +1,42 @@
 import { initialState } from './reducers';
 import { WS_CONNECT, WS_OPEN, WS_CLOSE, WS_ERROR, WS_MESSAGE  } from '../actions/actionsFeed';
+import { IFeedList, IInitialState, TFeedActions } from '../../utils/types';
 
-// WsStatus: 'OFFLINE',
-// WsError: '',
-// feedList: []
 
-export const FeedReducer = (state = initialState, action: any) => {
+export const FeedReducer = (state: IInitialState = initialState, action: TFeedActions): IInitialState => {
     switch (action.type) {
         case WS_CONNECT:
             return {
                 ...state,
-                WsStatus: 'CONNECTING',
-                WsError: ''
+                wsStatus: 'CONNECTING',
+                wsError: ''
             }
         case WS_CLOSE:
             return {
                 ...state,
-                WsStatus: 'OFFLINE',
-                WsError: ''
+                wsStatus: 'OFFLINE',
+                wsError: '',
+                feedList: null
             }
         case WS_ERROR: 
             return {
                 ...state,
-                WsStatus: 'OFFLINE',
+                wsStatus: 'OFFLINE',
                 wsError: action.payload
             }
         case WS_MESSAGE:
             return {
                 ...state,
-                WsStatus: 'ONLINE',
-                WsError: '',
+                wsStatus: 'ONLINE',
+                wsError: '',
                 feedList: action.payload
 
             }
         case WS_OPEN:
             return {
                 ...state,
-                WsStatus: 'ONLINE',
-                WsError: ''
+                wsStatus: 'ONLINE',
+                wsError: ''
             }
         default:
             return state

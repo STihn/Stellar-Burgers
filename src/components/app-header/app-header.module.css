@@ -26,7 +26,7 @@
     background: #1C1C21;
     box-sizing: border-box;
     text-align: center;
-    color: #F2F2F3;
+    color: #8585AD;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
@@ -35,8 +35,8 @@
     align-content: center;
 }
 
-.button_nav {
-    color: #8585AD;
+.button_active {
+    color: #F2F2F3;
 }
 
 .login {

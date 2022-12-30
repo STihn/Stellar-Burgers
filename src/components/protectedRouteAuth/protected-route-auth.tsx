@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../utils/types";
 import { Redirect, Route } from "react-router-dom";
 import { getUserInfo } from "../../services/actions/actionsUser";
 import { getCookie } from "../../utils/utils";
 
-interface RootState {
-    userReducuer: any
-}
 
 interface IProps {
     children: React.ReactNode,
@@ -17,7 +14,7 @@ interface IProps {
 
 const ProtectedRouteAuth = (props: IProps) => {
     const dispatch = useDispatch();
-    const {auth} = useSelector((store: RootState) => store.userReducuer);
+    const {auth} = useSelector((store) => store.userReducuer);
     const {children, location, path, exact} = props;
     const token = getCookie('accessToken');
 
@@ -32,7 +29,7 @@ const ProtectedRouteAuth = (props: IProps) => {
     return (
         <Route
             render={() =>
-                auth.user ? (
+                auth !== null && auth.user ? (
                     <Redirect
                         to={{
                         pathname: location?.state?.from.pathname || '/',

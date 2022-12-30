@@ -1,8 +1,8 @@
+import { IInitialState, TUserActions } from '../../utils/types';
 import { AUTH_USER, DELETE_USER } from '../actions/actionsUser';
 import { initialState } from './reducers';
 
-export const userReducuer = (state = initialState, action: any) => {
-
+export const userReducuer = (state: IInitialState = initialState, action: TUserActions): IInitialState => {
     switch(action.type) {
         case AUTH_USER: {
             return {
@@ -13,7 +13,7 @@ export const userReducuer = (state = initialState, action: any) => {
         case DELETE_USER: {
             return {
                 ...state,
-                auth: {},
+                auth: null,
             }
         }
         default: {
