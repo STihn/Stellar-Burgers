@@ -66,6 +66,7 @@ const Register: React.FC = () => {
                 <Button 
                     type="primary" 
                     size="small"
+                    htmlType='submit'
                 >
                     Зарегистрироваться
                 </Button>

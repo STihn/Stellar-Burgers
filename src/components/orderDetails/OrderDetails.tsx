@@ -2,16 +2,13 @@ import React from  'react';
 import cn from 'classnames';
 
 import styles from '../orderDetails/orderDetails.module.css';
-import { useSelector, useDispatch } from 'react-redux';
+import { IOrder, IOrderDetails, useSelector } from "../../utils/types";
 import imageModal from '../../images/done.gif';
 
 
-interface RootState {
-    orderDetailsReducer: any
-}
 const OrderDetails: React.FC = () => {
-    const {OrderDetails} = useSelector((store: RootState) => store.orderDetailsReducer)
-    const {order} = OrderDetails;
+    const {OrderDetails} = useSelector((store) => store.orderDetailsReducer)
+    const {order} = OrderDetails as unknown as IOrderDetails
     return (
         <React.Fragment>
             <h2 className={cn(styles.title, 'text text_type_digits-large', 'mt-8', 'mb-8')}>{order?.number}</h2>

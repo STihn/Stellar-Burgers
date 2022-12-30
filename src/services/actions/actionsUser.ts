@@ -1,11 +1,14 @@
+import { AppDispatch, IAuthUser } from "../../utils/types";
 import { getCookie } from "../../utils/utils";
 import { baseUrl, _checkResponse } from "./actions";
-export const AUTH_USER = 'AUTH_USER';
-export const DELETE_USER = 'DELETE_USER';
-export const CREATE_USER = 'CREATE_USER';
+
+export const AUTH_USER: 'AUTH_USER' = 'AUTH_USER';
+export const DELETE_USER: 'DELETE_USER' = 'DELETE_USER';
+export const CREATE_USER: 'CREATE_USER' = 'CREATE_USER';
+
 
 export function registry(props: object) {
-    return async (dispatch: Function) => {
+    return async (dispatch: AppDispatch) => {
         try {
             const res = await fetch(`${baseUrl}/auth/register`, {
                 method: 'POST',
@@ -17,7 +20,6 @@ export function registry(props: object) {
             let result = await _checkResponse(res);
             document.cookie = `accessToken=${result.accessToken}; max-age=1200`;
             localStorage.setItem('refreshToken', result.refreshToken)
-            return await dispatch({type: CREATE_USER, auth: result})
         }
         catch(err) {
             console.log(err)
@@ -26,9 +28,8 @@ export function registry(props: object) {
 }
 
 
-export const login = (props: object) => {
-
-    return async (dispatch: Function) => {
+export const login = (props: { email: string; password: string; }) => {
+    return async (dispatch: AppDispatch) => {
         try {
             const res = await fetch(`${baseUrl}/auth/login`, {
                 method: 'POST',
@@ -43,7 +44,7 @@ export const login = (props: object) => {
             document.cookie = `accessToken=${result.accessToken}; max-age=1200`;
             localStorage.setItem('refreshToken', result.refreshToken)
 
-            await dispatch({type: AUTH_USER,  user: {user: result.user, success: result.success}})
+            dispatch({type: AUTH_USER,  user: {user: result.user, success: result.success}})
             return result;
         }
         catch(err) {
@@ -54,7 +55,7 @@ export const login = (props: object) => {
 
 export function refreshToken() {
     const refreshToken = localStorage.getItem('refreshToken');
-    return async (dispatch: Function) => {
+    return async (dispatch: AppDispatch) => {
         try {
             const res = await fetch(`${baseUrl}/auth/token`, {
                 method: 'POST',
@@ -74,7 +75,7 @@ export function refreshToken() {
 }
 
 export const getUserInfo = () => {
-    return async(dispatch: Function) => {
+    return async(dispatch: AppDispatch) => {
         try {
             const res = await fetch(`${baseUrl}/auth/user`, {
                 method: 'GET',
@@ -84,7 +85,7 @@ export const getUserInfo = () => {
                 },
             });
             const result = await _checkResponse(res);
-            await dispatch({type: AUTH_USER,  user: {user: result.user, success: result.success}})
+            dispatch({type: AUTH_USER,  user: {user: result.user, success: result.success}})
         }
         catch(err) {
             console.log(err)

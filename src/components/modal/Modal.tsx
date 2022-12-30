@@ -11,11 +11,12 @@ interface IProps {
     children: React.ReactNode,
     onClose: () => void,
     text?: string
+    feedPage?: boolean
 }
 
 const Modal = (props: IProps) => {
     const modalRoot = document.getElementById("react-modals")!;
-    const {text, onClose, children} = props;
+    const {text, onClose, children, feedPage} = props;
 
     React.useEffect(() => {
         const handleEsc = (event: KeyboardEvent) => {
@@ -36,7 +37,7 @@ const Modal = (props: IProps) => {
             <section className={styles.body}>
                 <div className={styles.wrapper}>
                     <div className={cn(styles.wrap, 'mt-10','ml-10', 'mr-10', `${!text ? styles.iconBtn : null}`)}>
-                        {text && <p className={cn(styles.text, "text text_type_main-large")}>{text}</p>}
+                        {text && <p className={cn(styles.text, feedPage ?  "text text_type_digits-default" : "text text_type_main-large")}>{text}</p>}
                         <CloseIcon type="primary" onClick={onClose} />
                     </div>
                     {children}

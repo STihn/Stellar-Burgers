@@ -1,0 +1,23 @@
+.root {
+    min-width: 860px;
+    height: 330px;
+    margin: 180px auto 0px;
+    display: flex;
+}
+
+.wrap {
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+}
+
+.text {
+    color: #8585AD;
+    opacity: 0.4;
+    width: 320px;
+    min-height: 48px;
+}
+
+.feedWrap {
+    width: 844px;
+}

@@ -5,21 +5,20 @@ import cn from 'classnames';
 import { useDrop, useDrag } from "react-dnd";
 
 import {ConstructorElement, DragIcon} from '@ya.praktikum/react-developer-burger-ui-components';
+import { IIngredients } from "../../utils/types";
 
 interface IProps {
-    key?: string
-    moveCard?: any,
-    handleClose?: any
-    idx?: number,
-    item: any
+    key: string
+    moveCard: Function,
+    handleClose: Function
+    idx: number,
+    item: IIngredients
 }
-
 interface IHoverItem {
     id: string,
     idx: number,
     index: number
 }
-
 const ConstructorCard: React.FC<IProps> = (props) => {
     const {item, handleClose, idx, moveCard } = props;
     const {id} = item;
@@ -38,8 +37,8 @@ const ConstructorCard: React.FC<IProps> = (props) => {
                 return
             }
             
-            const dragIndex = item.idx;
-            const hoverIndex: number | undefined = idx;
+            const dragIndex: number = item.idx;
+            const hoverIndex: number = idx;
 
             if(dragIndex === hoverIndex) {
                 return;

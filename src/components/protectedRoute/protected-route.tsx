@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../utils/types";
 import { Redirect, Route } from "react-router-dom";
 import { getUserInfo } from "../../services/actions/actionsUser";
 import { getCookie } from "../../utils/utils";
@@ -12,14 +12,11 @@ interface IProps {
     location?: ILocation
 }
 
-interface RootState {
-    userReducuer: any
-}
 
 const ProtectedRoute = (props: IProps) => {
     const dispatch = useDispatch();
     const {children, location, path, exact} = props;
-    const {auth} = useSelector((store: RootState) => store.userReducuer)
+    const {auth} = useSelector((store) => store.userReducuer)
     const token = getCookie('accessToken');
 
 
@@ -33,7 +30,7 @@ const ProtectedRoute = (props: IProps) => {
     return (
         <Route 
             render={() =>
-                auth.user ? (
+                auth !== null && auth.user ? (
                     children
                     ) : (
                     <Redirect

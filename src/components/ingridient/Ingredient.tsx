@@ -43,13 +43,13 @@ const Ingredient = (props: IProps) => {
             return _id === counter[0]._id
         }
         else {
-            counter.map((item) => {
+            counter.map((item: { _id: string | undefined; count: number; }) => {
                 if(item._id === _id) {
                     result += item.count
                 }
                 return null
             })
-            return counter.find((item) => item._id === _id)
+            return counter.find((item: { _id: string | undefined; }) => item._id === _id)
         }
     }
 
